@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-back-button defaultHref="/tabs/sub-task" slot="start"></ion-back-button>
+    <ion-title>Add Sub Task</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="createSubTask" (ngSubmit)="createSubTaskSubmit()">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div padding>
+            <ion-item>
+              <ion-input
+                type="text"
+                formControlName="sub_task_title"
+                placeholder="Sub Task Title"
+                required></ion-input>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="!createSubTask.controls['sub_task_title'].valid && createSubTask.controls['sub_task_title'].touched">
+              Sub Task title is required.
+            </span>
+            <ion-item>
+              <ion-textarea
+                formControlName="description"
+                placeholder="Description"
+                ></ion-textarea>
+            </ion-item>
+            <ion-item>
+              <ion-select
+                placeholder="Select Users"
+                formControlName="user_id"
+                multiple="true"
+                required>
+                <ion-select-option
+                  *ngFor="let user of allUsers"
+                  [value]="user.user_id"
+                >
+                  {{user.first_name}}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="!createSubTask.controls['user_id'].valid && createSubTask.controls['user_id'].touched">
+              User required.
+            </span>
+            <ion-item>
+              <ion-select
+                placeholder="Select Task Priority"
+                formControlName="sub_task_priority"
+                required>
+                <ion-select-option
+                  *ngFor="let task of taskPriorities"
+                  [value]="task.task_priority"
+                required>
+                  {{task.task_priority}}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="!createSubTask.controls['sub_task_priority'].valid && createSubTask.controls['sub_task_priority'].touched">
+              Task Priority is required.
+            </span>
+            <ion-item>
+              <ion-select
+                placeholder="Select Task Interval"
+                formControlName="task_interval"
+                required>
+                <ion-select-option
+                  *ngFor="let item of intervals"
+                  [value]="item.task_interval"
+                  >
+                  {{item.task_interval}}</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="!createSubTask.controls['task_interval'].valid && createSubTask.controls['task_interval'].touched">
+              Task Interval is required.
+            </span>
+            <ion-item>
+              <ion-input [value]="dateValue2" placeholder="Choose Start Date"  formControlName="start_date" required></ion-input>
+              <ion-button fill="clear" id="open-date-input-2">
+                <ion-icon icon="calendar"></ion-icon>
+              </ion-button>
+              <ion-popover trigger="open-date-input-2" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime
+                    #popoverDatetime2
+                    presentation="date"
+                    (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
+                  ></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="!createSubTask.controls['start_date'].valid && createSubTask.controls['start_date'].touched">
+              Start Date is required.
+            </span>
+            <ion-item>
+              <ion-input [value]="dateValue3" placeholder="Choose End Date"  formControlName="end_date" required></ion-input>
+              <ion-button fill="clear" id="open-date-input-3">
+                <ion-icon icon="calendar"></ion-icon>
+              </ion-button>
+              <ion-popover trigger="open-date-input-3" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime
+                    #popoverDatetime3
+                    presentation="date"
+                    (ionChange)="dateValue3 = formatDate2(popoverDatetime3.value)"
+                  ></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="!createSubTask.controls['end_date'].valid && createSubTask.controls['end_date'].touched">
+              End Date is required.
+            </span>
+            <ion-item>
+              <ion-label>File Attachment</ion-label>
+              <ion-checkbox formControlName="has_attachment"></ion-checkbox>
+            </ion-item>
+            <ion-item *ngIf="createSubTask.get('has_attachment').value === true">
+              <input type="file"  (change)="onImagePicked($event)" accept=".pdf, .doc, .docx, .text, .excel, .jpg, .jpeg, .bmp, .png, .eps, .gif, .tif, .tiff">
+            </ion-item>
+            <ion-button
+              ion-button
+              type="submit"
+              expand="full"
+              [disabled]="!createSubTask.valid"
+              >Submit</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

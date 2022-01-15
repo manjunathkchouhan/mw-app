@@ -1,0 +1,30 @@
+input:focus{
+  border: none !important;
+  outline: none !important;
+  width: 100%;
+  justify-content: center;
+}
+input{
+  border: none !important;
+  width: 100%;
+  justify-content: center;
+
+}
+ion-select {
+  width: 100%;
+
+  justify-content: center;
+}
+
+
+ion-popover{
+  --width: 90%;
+  position: absolute;
+  // top: 50% !important;
+      // left: -20% !important;
+      // transform: translate(-50%, -50%) !important;
+}
+
+.error{
+  color: red;
+}

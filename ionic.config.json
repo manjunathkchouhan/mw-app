@@ -1,0 +1,7 @@
+{
+  "name": "mw-teams-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

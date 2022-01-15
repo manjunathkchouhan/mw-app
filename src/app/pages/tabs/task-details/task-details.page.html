@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <!-- <ion-icon slot="start" name="ios-arrow-back"></ion-icon> -->
+    <ion-back-button defaultHref="/tabs/task" slot="start"></ion-back-button>
+    <ion-title>Task Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" (click)="onAddSubTask()">Add Sub Task</ion-button>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{singleTask?.task_title}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content >
+      <ion-grid>
+        <!-- <ion-row>
+          <ion-col><span class="sp">Task: </span><strong>{{singleTask.task_title}}</strong></ion-col>
+        </ion-row> -->
+        <ion-row>
+          <ion-col><span class="sp">Project:</span></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>{{singleTask?.project_title}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><span class="sp">Category: </span></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>{{singleTask?.category}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><span class="sp">Description: </span></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>{{singleTask?.description}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><span class="sp">Start Date: </span></ion-col>
+          <ion-col><span class="sp">End Date: </span></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>{{singleTask?.start_date | date: 'dd/MM/yyyy'}}</ion-col>
+          <ion-col>{{singleTask?.end_date | date: 'dd/MM/yyyy'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><span class="sp">Time Left: </span>1 day </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><span class="sp">Priority: </span></ion-col>
+          <ion-col><span class="sp">Task Status: </span><strong></strong></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><strong>{{singleTask?.task_priority}}</strong></ion-col>
+          <ion-col><strong>{{singleTask?.task_priority}}</strong></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col><span class="sp">Completion: </span>0 %</ion-col>
+        </ion-row>
+        <!-- <ion-row>
+          <ion-col>
+            <span class="sp">Attachments: </span><a class="link" href="{{singleTask.source_location}}" target="_blank">Open file</a>
+          </ion-col>
+        </ion-row> -->
+        <!-- <ion-row>
+          <ion-col>
+            <span class="sp">Users: </span><a class="link" (click)="openDialog()" >Click here to view users</a>
+          </ion-col>
+        </ion-row> -->
+        <ion-row>
+          <ion-col>
+            <span class="sp">Sub Task:</span>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let subtask of singleTask?.sub_tasks">
+          <ion-col>
+            {{subtask?.sub_task_title}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

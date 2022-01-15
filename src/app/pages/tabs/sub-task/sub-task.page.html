@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <!-- <ion-title>Sub Task</ion-title> -->
+    <ion-searchbar
+    animated="true"
+    debounce="800"
+    #searchInput
+    [(ngModel)]="filterTerm"  slot="start"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngFor="let tasks of subTasksList | filter:filterTerm">
+    <ion-item (click)="onSubTaskDetails(tasks?.sub_task_id)">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div><ion-label>{{tasks?.sub_task_title}}</ion-label></div>
+          </ion-col>
+          <!-- <ion-col size="2">
+            <div><ion-icon name="list-outline"></ion-icon></div>
+          </ion-col> -->
+        </ion-row>
+        <ion-row>
+          <ion-col size="8">
+            <div>
+              <ion-progress-bar
+                value="{{tasks?.task_completion}}"
+                class="ion-padding-horizontal"
+              ></ion-progress-bar>
+            </div>
+          </ion-col>
+          <ion-col size="4">
+            <div>
+              <ion-text class="ion-padding-horizontal"
+                >{{tasks?.task_completion}}%</ion-text
+              >
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+</ion-content>
