@@ -8,3 +8,23 @@
 .link:hover{
   color: blue;
 }
+
+// ion-textarea{
+//   height: 40px;
+// }
+
+
+
+
+.icon-input {
+  display: flex;
+  align-items: flex-end;
+  /* position: absolute; */
+  padding-right: 10px;
+  bottom: 0;
+  font-size: 18px;
+  min-width: 0 !important;
+  text-align: left !important;
+  color: red;
+  margin-top: 17px;
+}

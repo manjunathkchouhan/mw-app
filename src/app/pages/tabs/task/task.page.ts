@@ -23,10 +23,11 @@ export class TaskPage implements OnInit {
     private authenticationService: AuthenticationService,
     private menu: MenuController,
     private router: Router
-  ) { }
+  ) {
+    this.getUserDetails();
+  }
 
   ngOnInit() {
-    this.getUserDetails();
   }
   async getUserDetails(){
     const token = await Storage.get({ key: TOKEN_KEY });
@@ -53,6 +54,10 @@ export class TaskPage implements OnInit {
   async openMenu(){
     await console.log('clicking on clik');
     await this.menu.open();
+  }
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad RandomCardsPage');
+    console.log(this.tasksList);
   }
 
   onTaskDetails(taskid){

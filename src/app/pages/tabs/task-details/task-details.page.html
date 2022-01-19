@@ -8,15 +8,28 @@
 
 <ion-content>
   <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" (click)="onAddSubTask()">Add Sub Task</ion-button>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{singleTask?.task_title}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content >
+  <!-- <form [formGroup]="editTask">
+
+    <ion-item>
+      <ion-label position="floating">Task Title</ion-label>
+      <ion-input formControlName="task_title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"> Project Title</ion-label>
+      <ion-input formControlName="category_id"  ></ion-input>
+    </ion-item>
+  </form> -->
+  <!-- <ion-card> -->
+    <!-- <ion-card-header> -->
+
+    <!-- </ion-card-header> -->
+    <!-- <ion-card-content > -->
       <ion-grid>
-        <!-- <ion-row>
-          <ion-col><span class="sp">Task: </span><strong>{{singleTask.task_title}}</strong></ion-col>
-        </ion-row> -->
+        <ion-row>
+          <ion-col>
+            <h2>{{singleTask?.task_title}}</h2>
+          </ion-col>
+        </ion-row>
         <ion-row>
           <ion-col><span class="sp">Project:</span></ion-col>
         </ion-row>
@@ -52,34 +65,32 @@
         </ion-row>
         <ion-row>
           <ion-col><strong>{{singleTask?.task_priority}}</strong></ion-col>
-          <ion-col><strong>{{singleTask?.task_priority}}</strong></ion-col>
+          <ion-col><strong>{{singleTask?.task_status}}</strong></ion-col>
         </ion-row>
         <ion-row>
           <ion-col><span class="sp">Completion: </span>0 %</ion-col>
         </ion-row>
-        <!-- <ion-row>
-          <ion-col>
-            <span class="sp">Attachments: </span><a class="link" href="{{singleTask.source_location}}" target="_blank">Open file</a>
-          </ion-col>
-        </ion-row> -->
-        <!-- <ion-row>
-          <ion-col>
-            <span class="sp">Users: </span><a class="link" (click)="openDialog()" >Click here to view users</a>
-          </ion-col>
-        </ion-row> -->
         <ion-row>
           <ion-col>
             <span class="sp">Sub Task:</span>
           </ion-col>
         </ion-row>
-        <ion-row *ngFor="let subtask of singleTask?.sub_tasks">
-          <ion-col>
-            {{subtask?.sub_task_title}}
-          </ion-col>
-        </ion-row>
+        <!-- <ion-row > -->
+          <!-- <ion-col> -->
+            <ion-list   *ngFor="let subtask of singleTask?.sub_tasks">
+              <ion-item (click)="onSubTaskDetails(subtask?.sub_task_id)">
+                <ion-label>{{subtask?.sub_task_title}}</ion-label>
+              </ion-item>
+            </ion-list>
+          <!-- </ion-col> -->
+        <!-- </ion-row> -->
       </ion-grid>
-    </ion-card-content>
-  </ion-card>
-
-
+    <!-- </ion-card-content>
+  </ion-card> -->
 </ion-content>
+<!-- <ion-footer>
+  <ion-item>
+    <ion-textarea placeholder="comments"></ion-textarea>
+    <ion-icon name="send-outline" class="icon-input"></ion-icon>
+  </ion-item>
+</ion-footer> -->

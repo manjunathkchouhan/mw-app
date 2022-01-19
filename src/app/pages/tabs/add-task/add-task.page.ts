@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { IonDatetime } from '@ionic/angular';
+import { AlertController, IonDatetime, LoadingController } from '@ionic/angular';
 import { format, parseISO } from 'date-fns';
 import { Storage } from '@capacitor/storage';
 // import { IonicSelectableComponent } from 'ionic-selectable';
@@ -39,14 +39,21 @@ export class AddTaskPage implements OnInit {
   dateValue2 = '';
   dateValue3 ='';
   token;
+  today;
+  dateTill;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private datePipe: DatePipe,
-    private routes: Router,
+    private alertController: AlertController,
+    private router: Router,
+    private loadingController: LoadingController
   ) { }
 
  ngOnInit() {
+  this.today = new Date();
+  this.today.setDate(this.today.getDate());
+  this.dateTill = this.today.toISOString().substring(0, 10);
     this.getUserDetails();
     this.form();
     this.getAllProjects();
@@ -153,7 +160,7 @@ export class AddTaskPage implements OnInit {
   //   console.log('project:', event.value);
   // }
 
-  createTaskSubmit(){
+  async createTaskSubmit(){
     console.log(this.token);
     this.createTask.value.created_by = this.token.user_id;
     if(this.createTask.value.has_attachment === true){
@@ -165,17 +172,32 @@ export class AddTaskPage implements OnInit {
     this.createTask.value.end_date = this.datePipe.transform(this.createTask.value.end_date, 'yyyy-MM-dd');
     this.allProjects.filter(p =>{
       if(p.project_id === this.createTask.value.project_id){
-        // this.createTask.value.project_id = p.project_id;
         this.createTask.value.category_id = p.category_id;
       }
     });
     this.createTask.value.user_id = JSON.stringify(this.createTask.value.user_id);
     console.log(this.createTask.value);
-    this.authenticationService.addTask(this.createTask.value).subscribe((res: any) =>{
+    const loading = await this.loadingController.create();
+    await loading.present();
+    this.authenticationService.addTask(this.createTask.value).subscribe(async (res: any) =>{
       console.log(res);
-      if(res){
-        this.routes.navigateByUrl('/tabs/task', { replaceUrl: true });
+      if(res.status === 'SUCCESS'){
+        loading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Added task successfully',
+          buttons: ['OK'],
+        });
+       await alert.present();
+        this.router.navigateByUrl('/tabs/task', { replaceUrl: true });
         // this.routes.navigate(['/tabs/task']);
+      }else{
+        loading.dismiss();
+        const alert = await this.alertController.create({
+          header: res.status,
+          message: res.message,
+          buttons: ['retry...'],
+        });
+       await alert.present();
       }
     });
   }

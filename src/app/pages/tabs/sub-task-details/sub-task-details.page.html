@@ -1,75 +1,80 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-back-button defaultHref="/tabs/sub-task" slot="start"></ion-back-button>
+    <ion-back-button
+      defaultHref="/tabs/sub-task"
+      slot="start"
+    ></ion-back-button>
     <ion-title>Sub Task Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-card-header>
+  <!-- <ion-card> -->
+  <!-- <ion-card-header>
       <ion-card-title>{{subTaskDetails?.sub_task_title}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content >
-      <ion-grid>
-        <!-- <ion-row>
-          <ion-col><span class="sp">Task: </span><strong>{{subTaskDetails.task_title}}</strong></ion-col>
-        </ion-row> -->
-        <ion-row>
-          <ion-col><span class="sp">Project:</span></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>{{subTaskDetails?.category}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><span class="sp">Description: </span></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>{{subTaskDetails?.description}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><span class="sp">Start Date: </span></ion-col>
-          <ion-col><span class="sp">End Date: </span></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>{{subTaskDetails?.start_date | date: 'dd/MM/yyyy'}}</ion-col>
-          <ion-col>{{subTaskDetails?.end_date | date: 'dd/MM/yyyy'}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><span class="sp">Time Left: </span>1 day </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><span class="sp">Priority: </span></ion-col>
-          <ion-col><span class="sp">Task Status: </span><strong></strong></ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col><strong>{{subTaskDetails?.sub_task_priority}}</strong></ion-col>
-          <!-- <ion-col><strong>{{subTaskDetails?.task_priority}}</strong></ion-col> -->
-        </ion-row>
-        <ion-row>
-          <ion-col><span class="sp">Completion: </span>0 %</ion-col>
-        </ion-row>
-        <!-- <ion-row>
+    </ion-card-header> -->
+  <!-- <ion-card-content > -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <h2>{{subTaskDetails?.sub_task_title}}</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Description: </span></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>{{subTaskDetails?.description}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Start Date: </span></ion-col>
+      <ion-col><span class="sp">End Date: </span></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>{{subTaskDetails?.start_date | date: 'dd/MM/yyyy'}}</ion-col>
+      <ion-col>{{subTaskDetails?.end_date | date: 'dd/MM/yyyy'}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Time Left: </span>1 day </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Priority: </span></ion-col>
+      <ion-col><span class="sp">Task Status: </span><strong></strong></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>{{subTaskDetails?.sub_task_priority}}</strong></ion-col>
+      <ion-col><strong>{{subTaskDetails?.task_status}}</strong></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Completion: </span>0 %</ion-col>
+    </ion-row>
+    <!-- <ion-row>
           <ion-col>
             <span class="sp">Attachments: </span><a class="link" href="{{subTaskDetails.source_location}}" target="_blank">Open file</a>
           </ion-col>
         </ion-row> -->
-        <!-- <ion-row>
+    <!-- <ion-row>
           <ion-col>
             <span class="sp">Users: </span><a class="link" (click)="openDialog()" >Click here to view users</a>
           </ion-col>
         </ion-row> -->
-        <!-- <ion-row>
+    <!-- <ion-row>
           <ion-col>
             <span class="sp">Sub Task:</span>
           </ion-col>
         </ion-row> -->
-        <!-- <ion-row *ngFor="let subtask of subTaskDetails?.sub_tasks">
+    <!-- <ion-row *ngFor="let subtask of subTaskDetails?.sub_tasks">
           <ion-col>
             {{subtask?.sub_task_title}}
           </ion-col>
         </ion-row> -->
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+  </ion-grid>
+  <!-- </ion-card-content>
+  </ion-card> -->
 </ion-content>
+<!-- <ion-footer>
+  <ion-item>
+    <ion-textarea placeholder="comments"></ion-textarea>
+    <ion-icon name="send-outline" class="icon-input"></ion-icon>
+  </ion-item>
+</ion-footer> -->

@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonDatetime } from '@ionic/angular';
+import { AlertController, IonDatetime, LoadingController } from '@ionic/angular';
 import { format, parseISO } from 'date-fns';
 import { Storage } from '@capacitor/storage';
 // import { IonicSelectableComponent } from 'ionic-selectable';
@@ -40,18 +40,25 @@ export class AddSubTaskPage implements OnInit {
   token;
   singleTask: any;
   taskId;
+  dateTill;
+  today;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private datePipe: DatePipe,
     private routes: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private alertController: AlertController,
+    private loadingController: LoadingController
   ) {
     this.taskId = this.activatedRoute.snapshot.paramMap.get('task_id');
     console.log(this.taskId);
   }
 
   ngOnInit(): void {
+    this.today = new Date();
+    this.today.setDate(this.today.getDate());
+    this.dateTill = this.today.toISOString().substring(0, 10);
     this.form();
     this.getAllPriorities();
     this.getAllUsers();
@@ -129,7 +136,7 @@ export class AddSubTaskPage implements OnInit {
     });
   }
 
-  createSubTaskSubmit(){
+ async createSubTaskSubmit(){
     // console.log(this.createSubTask.value)
     if(this.createSubTask.value.has_attachment === true){
       this.createSubTask.value.has_attachment = 'YES';
@@ -142,10 +149,26 @@ export class AddSubTaskPage implements OnInit {
     this.createSubTask.value.task_id = this.taskId;
     this.createSubTask.value.created_by = this.token.user_id;
     console.log(this.createSubTask.value);
-    this.authenticationService.addSubTask(this.createSubTask.value).subscribe((res: any) =>{
+    const loading = await this.loadingController.create();
+    await loading.present();
+    this.authenticationService.addSubTask(this.createSubTask.value).subscribe(async (res: any) =>{
       console.log(res);
-      if(res){
+      if(res.status === 'SUCCESS'){
+        loading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Added Subtask successfully',
+          buttons: ['OK'],
+        });
+       await alert.present();
         this.routes.navigate(['/tabs/sub-task']);
+      }else {
+        loading.dismiss();
+        const alert = await this.alertController.create({
+          header: res.status,
+          message: res.message,
+          buttons: ['retry...'],
+        });
+       await alert.present();
       }
     });
   }

@@ -1,9 +1,16 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>profile</ion-title>
+    <ion-title>Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+      <ion-label>
+        <h1 style="font-weight: bold; text-align: center">{{token?.first_name}} {{token?.last_name}}</h1>
+        <h3 style="text-align:center">{{token?.email}}</h3>
+        <p style="text-align:center">
+          {{token?.role_name}}
+        </p>
+      </ion-label>
   <ion-button expand="full" (click)="submitLogout()">Logout</ion-button>
 </ion-content>

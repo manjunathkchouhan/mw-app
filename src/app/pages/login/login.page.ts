@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Storage } from '@capacitor/storage';
-import { stringify } from 'querystring';
+import { Device } from '@capacitor/device';
+import { BehaviorSubject } from 'rxjs';
+const TOKEN_KEY = 'my-token';
 
 @Component({
   selector: 'app-login',
@@ -12,14 +15,25 @@ import { stringify } from 'querystring';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
   credentials: FormGroup;
+  deviceID;
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
     private alertController: AlertController,
     private router: Router,
     private loadingController: LoadingController
-  ) { }
+
+  ) {
+    this.getDevice();
+   }
+   getDevice = async () => {
+    const info = await Device.getId();
+    console.log(info.uuid);
+    this.deviceID = info.uuid;
+  };
+
 
   ngOnInit() {
     this.credentials = this.fb.group({
@@ -30,22 +44,43 @@ export class LoginPage implements OnInit {
   async login() {
     const loading = await this.loadingController.create();
     await loading.present();
-    this.authService.login(this.credentials.value).subscribe(
-      async (res) => {
-        console.log(res);
+    const loginData = {
+      email: this.credentials.value.email,
+      password: this.credentials.value.password,
+      device_id: this.deviceID
+    };
+    console.log(loginData);
+    this.authService.login(loginData).subscribe(async (res: any) =>{
+      console.log(res);
+      if(res.status === 'SUCCESS'){
         await loading.dismiss();
-        // Storage.set({key: 'user', value: JSON>stringify(res)});
+        Storage.set({key: TOKEN_KEY, value: JSON.stringify(res.data)});
         this.router.navigateByUrl('/tabs', { replaceUrl: true });
-      }, async (res) => {
+        this.isAuthenticated.next(true);
+      }else if(res.status === 'FAILED') {
         await loading.dismiss();
         const alert = await this.alertController.create({
           header: 'Login failed',
-          message: res.error.error,
+          message: res.message,
           buttons: ['OK'],
         });
-
         await alert.present();
       }
+    }
+      // async (res) => {
+      //   console.log();
+      //   // if()
+
+      // }, async (res) => {
+      //   await loading.dismiss();
+      //   const alert = await this.alertController.create({
+      //     header: 'Login failed',
+      //     message: res.error.error,
+      //     buttons: ['OK'],
+      //   });
+
+      //   await alert.present();
+      // }
     );
   }
 

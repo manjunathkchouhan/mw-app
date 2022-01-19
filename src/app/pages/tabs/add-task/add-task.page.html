@@ -113,6 +113,7 @@
               <ion-popover trigger="open-date-input-2" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
+                  min="{{dateTill}}"
                     #popoverDatetime2
                     presentation="date"
                     (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
@@ -131,6 +132,7 @@
               <ion-popover trigger="open-date-input-3" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
+                  min="{{dateTill}}"
                     #popoverDatetime3
                     presentation="date"
                     (ionChange)="dateValue3 = formatDate2(popoverDatetime3.value)"

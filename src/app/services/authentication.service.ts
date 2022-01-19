@@ -29,16 +29,18 @@ export class AuthenticationService {
 
   login(credentials) {
     console.log(credentials);
-    return this.http.post(`http://13.232.183.208/mw_team_app/mobile_app_apis/user_login.php?method=submitLogin`, credentials).pipe(
-      map((data: any) => data),
-      switchMap(token =>{
-        console.log(token);
-        return from(Storage.set({key: TOKEN_KEY, value: JSON.stringify(token)}));
-      }),
-      tap(_ => {
-        this.isAuthenticated.next(true);
-      })
-    );
+    return this.http.post(`http://13.232.183.208/mw_team_app/mobile_app_apis/user_login.php?method=submitLogin`, credentials);
+    // .pipe(
+    //   map((data: any) => data
+    //   ),
+    //   switchMap(token =>{
+    //     console.log(token);
+    //     return from(Storage.set({key: TOKEN_KEY, value: JSON.stringify(token)}));
+    //   }),
+    //   tap(_ => {
+    //     this.isAuthenticated.next(true);
+    //   })
+    // );
   }
 
   //submitLogout
