@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,NgZone } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Storage } from '@capacitor/storage';
@@ -21,7 +21,8 @@ export class TaskDetailsPage implements OnInit {
     private authService: AuthenticationService,
     private routes: Router,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private zone: NgZone
   ) {
     this.taskId = this.activatedRoute.snapshot.paramMap.get('task_id');
     console.log(this.taskId);
@@ -60,7 +61,9 @@ export class TaskDetailsPage implements OnInit {
      this.authService.getTaskDetails(task).subscribe((res: any)=>{
        console.log(res);
        if(res){
+        this.zone.run(() => {
          this.singleTask = res;
+        });
        }
      });
    }
@@ -70,6 +73,12 @@ export class TaskDetailsPage implements OnInit {
 
    onSubTaskDetails(subTaskId){
     this.routes.navigate(['/tabs/sub-task-details/' + subTaskId]);
+   }
+   onChangeRequest(){
+    this.routes.navigate(['/tabs/change-request/' + this.taskId]);
+   }
+   onUpdateTask(){
+    this.routes.navigate(['/tabs/update-task/' + this.taskId]);
    }
 
 }

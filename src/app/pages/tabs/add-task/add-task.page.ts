@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { AlertController, IonDatetime, LoadingController } from '@ionic/angular';
+import { AlertController, IonDatetime, LoadingController, NavController } from '@ionic/angular';
 import { format, parseISO } from 'date-fns';
 import { Storage } from '@capacitor/storage';
 // import { IonicSelectableComponent } from 'ionic-selectable';
@@ -47,7 +47,8 @@ export class AddTaskPage implements OnInit {
     private datePipe: DatePipe,
     private alertController: AlertController,
     private router: Router,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    public navCtrl: NavController
   ) { }
 
  ngOnInit() {
@@ -189,6 +190,7 @@ export class AddTaskPage implements OnInit {
         });
        await alert.present();
         this.router.navigateByUrl('/tabs/task', { replaceUrl: true });
+        // this.navCtrl.navigateForward('/tabs/task');
         // this.routes.navigate(['/tabs/task']);
       }else{
         loading.dismiss();

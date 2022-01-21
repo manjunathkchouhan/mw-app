@@ -11,6 +11,7 @@
 </ion-header>
 
 <ion-content>
+
   <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" routerLink="/tabs/add-task">Add Task</ion-button>
   <ion-list *ngFor="let tasks of tasksList | filter:filterTerm">
     <ion-item (click)="onTaskDetails(tasks?.task_id)">
@@ -24,7 +25,7 @@
           </ion-col> -->
         </ion-row>
         <ion-row>
-          <ion-col size="8">
+          <ion-col size="4">
             <div>
               <ion-progress-bar
                 value="{{tasks?.task_completion}}"
@@ -37,6 +38,17 @@
               <ion-text class="ion-padding-horizontal"
                 >{{tasks?.task_completion}}%</ion-text
               >
+            </div>
+          </ion-col>
+          <ion-col size="4" class="ion-text-end">
+            <div *ngIf="tasks?.days_left > 5">
+              <ion-icon style="color: green;" name="radio-button-on" ></ion-icon>
+            </div>
+            <div *ngIf="tasks?.days_left >= 2 && tasks?.days_left <= 5">
+              <ion-icon style="color: orange;" name="radio-button-on" ></ion-icon>
+            </div>
+            <div *ngIf="tasks?.days_left < 2">
+              <ion-icon style="color: red;" name="radio-button-on" ></ion-icon>
             </div>
           </ion-col>
         </ion-row>
@@ -61,4 +73,5 @@
         </ion-row>
       </ion-item>
     </ng-container> -->
+
 </ion-content>

@@ -73,7 +73,7 @@ export class AuthenticationService {
     return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=addNewTask',taskData);
   }
   updateTask(updatedTaskData){
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=updateTask', updatedTaskData);
+    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=updateTaskStatus', updatedTaskData);
   }
   deleteTask(taskId){
     return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=updateTask', taskId);
@@ -82,6 +82,8 @@ export class AuthenticationService {
     return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/subtasks.php?method=addSubTask',subTaskData);
   }
   updateSubTask(updatedSubTaskData){
+
+
     return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=updateSubTask', updatedSubTaskData);
   }
   deleteSubTask(subTaskId){
@@ -97,13 +99,13 @@ export class AuthenticationService {
     return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskIntervals');
   }
   getAllTasks(loggedUser){
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=getTasksList', loggedUser);
+    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getTasksList', loggedUser);
   }
   getTaskDetails(taskId){
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=getTaskDetails',taskId);
+    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getTaskDetails',taskId);
   }
   getSubTaskList(userData){
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/subtasks.php?method=getSubTasksList',userData);
+    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getSubTasksList',userData);
   }
   getUsersForSubTask(){
     return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/subtasks.php?method=getUsersForSubTask');
@@ -111,4 +113,8 @@ export class AuthenticationService {
   getSubTaskDetails(subTaskId){
     return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getSubTaskDetails',subTaskId);
   }
+//http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusForUpdate
+ getTaskStatusForUpdate(){
+  return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusForUpdate');
+ }
 }

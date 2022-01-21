@@ -24,11 +24,18 @@ export class TaskPage implements OnInit {
     private menu: MenuController,
     private router: Router
   ) {
-    this.getUserDetails();
   }
 
   ngOnInit() {
+    console.log('ngoninit task');
+    this.getUserDetails();
   }
+
+  ionViewWillEnter() {
+    console.log('ionviewwillenter task');
+    this.getUserDetails();
+  }
+
   async getUserDetails(){
     const token = await Storage.get({ key: TOKEN_KEY });
     if (token && token.value) {
@@ -55,9 +62,9 @@ export class TaskPage implements OnInit {
     await console.log('clicking on clik');
     await this.menu.open();
   }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RandomCardsPage');
-    console.log(this.tasksList);
+  ionViewDidEnter() {
+    console.log('ionvieDidEnter task');
+    this.getUserDetails();
   }
 
   onTaskDetails(taskid){

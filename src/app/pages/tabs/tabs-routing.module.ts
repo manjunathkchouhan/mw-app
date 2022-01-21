@@ -46,6 +46,14 @@ const routes: Routes = [
   {
     path: 'sub-task-details/:sub_task_id',
     loadChildren: () => import('./sub-task-details/sub-task-details.module').then( m => m.SubTaskDetailsPageModule)
+  },
+  {
+    path: 'change-request/:task_id',
+    loadChildren: () => import('./change-request/change-request.module').then( m => m.ChangeRequestPageModule)
+  },
+  {
+    path: 'update-task/:task_id',
+    loadChildren: () => import('./update-task/update-task.module').then( m => m.UpdateTaskPageModule)
   }
 ];
 

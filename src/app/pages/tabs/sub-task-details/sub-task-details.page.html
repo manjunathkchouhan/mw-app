@@ -1,9 +1,11 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary"  mode="ios">
+    <ion-buttons slot="start">
     <ion-back-button
       defaultHref="/tabs/sub-task"
       slot="start"
     ></ion-back-button>
+    </ion-buttons>
     <ion-title>Sub Task Details</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -35,7 +37,12 @@
       <ion-col>{{subTaskDetails?.end_date | date: 'dd/MM/yyyy'}}</ion-col>
     </ion-row>
     <ion-row>
-      <ion-col><span class="sp">Time Left: </span>1 day </ion-col>
+      <ion-col *ngIf="subTaskDetails?.days_left >= 1">
+        <span class="sp">Days Left: </span>{{subTaskDetails?.days_left}}
+      </ion-col>
+      <ion-col *ngIf="subTaskDetails?.days_left < 1">
+        <span class="sp">Overdue: </span> <span *ngIf="subTaskDetails?.days_left < 1 "><strong style="color:red">{{-subTaskDetails?.days_left}}</strong></span>
+      </ion-col>
     </ion-row>
     <ion-row>
       <ion-col><span class="sp">Priority: </span></ion-col>
