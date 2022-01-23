@@ -189,9 +189,7 @@ export class AddTaskPage implements OnInit {
           buttons: ['OK'],
         });
        await alert.present();
-        this.router.navigateByUrl('/tabs/task', { replaceUrl: true });
-        // this.navCtrl.navigateForward('/tabs/task');
-        // this.routes.navigate(['/tabs/task']);
+        this.router.navigateByUrl('/tabs/task', {replaceUrl: true});
       }else{
         loading.dismiss();
         const alert = await this.alertController.create({

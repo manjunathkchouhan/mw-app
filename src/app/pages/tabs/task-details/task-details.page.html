@@ -9,8 +9,8 @@
 
 <ion-content>
   <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" (click)="onAddSubTask()">Add Sub Task</ion-button>
-  <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" (click)="onChangeRequest()">Chnage Request</ion-button>
-  <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" (click)="onUpdateTask()">Update Task</ion-button>
+  <!-- <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" (click)="onChangeRequest()">Chnage Request</ion-button> -->
+  <ion-button  expand="full" (click)="onUpdateTask()">Update Task</ion-button>
   <!-- <form [formGroup]="editTask">
 
     <ion-item>
