@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import { AlertController, IonDatetime, LoadingController, NavController } from '@ionic/angular';
 import { format, parseISO } from 'date-fns';
 import { Storage } from '@capacitor/storage';
-// import { IonicSelectableComponent } from 'ionic-selectable';
 const TOKEN_KEY = 'my-token';
 
 
@@ -78,6 +77,10 @@ export class AddTaskPage implements OnInit {
       base64_file: [''],
       created_by: ['']
     });
+    this.createTask.patchValue({ start_date: this.dateTill});
+    this.createTask.get('start_date')?.updateValueAndValidity();
+    // this.createTask.patchValue({ end_date: this.dateTill});
+    // this.createTask.get('end_date')?.updateValueAndValidity();
   }
   formatDate(value: string) {
     return format(parseISO(value), 'MMM dd yyyy');
@@ -154,15 +157,8 @@ export class AddTaskPage implements OnInit {
       }
     });
   }
-  // projectChange(event: {
-  //   component: IonicSelectableComponent;
-  //   value: any;
-  // }) {
-  //   console.log('project:', event.value);
-  // }
 
   async createTaskSubmit(){
-    console.log(this.token);
     this.createTask.value.created_by = this.token.user_id;
     if(this.createTask.value.has_attachment === true){
       this.createTask.value.has_attachment = 'YES';
@@ -177,19 +173,17 @@ export class AddTaskPage implements OnInit {
       }
     });
     this.createTask.value.user_id = JSON.stringify(this.createTask.value.user_id);
-    console.log(this.createTask.value);
     const loading = await this.loadingController.create();
     await loading.present();
     this.authenticationService.addTask(this.createTask.value).subscribe(async (res: any) =>{
-      console.log(res);
       if(res.status === 'SUCCESS'){
         loading.dismiss();
-        const alert = await this.alertController.create({
-          header: 'Added task successfully',
-          buttons: ['OK'],
-        });
-       await alert.present();
-        this.router.navigateByUrl('/tabs/task', {replaceUrl: true});
+      //   const alert = await this.alertController.create({
+      //     header: 'Added task successfully',
+      //     buttons: ['OK'],
+      //   });
+      //  await alert.present();
+       this.router.navigateByUrl('/tabs/task', {replaceUrl: true});
       }else{
         loading.dismiss();
         const alert = await this.alertController.create({
@@ -201,12 +195,11 @@ export class AddTaskPage implements OnInit {
       }
     });
   }
+
   onImagePicked(event: any) {
     const file = event.target.files[0];
-
     const name = event.target.files[0].name;
     const lastDot = name.lastIndexOf('.');
-
     const fileName = name.substring(0, lastDot);
     const ext = name.substring(lastDot + 1);
     this.createTask.patchValue({ file_name: fileName });
@@ -214,7 +207,6 @@ export class AddTaskPage implements OnInit {
     this.createTask.patchValue({ file_extension: '.'+ ext });
     this.createTask.get('file_extension')?.updateValueAndValidity();
     const reader = new FileReader();
-
     reader.onload = () => {
       console.log(reader.result);
       // eslint-disable-next-line prefer-const
@@ -222,7 +214,6 @@ export class AddTaskPage implements OnInit {
       this.createTask.patchValue({ base64_file: base64 });
       this.createTask.get('base64_file')?.updateValueAndValidity();
     };
-
     reader.readAsDataURL(file);
   }
 }

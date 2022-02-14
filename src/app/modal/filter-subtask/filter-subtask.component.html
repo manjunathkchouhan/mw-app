@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons fill="outline" slot="end">
+      <ion-button (click)="dismiss()"> Clear </ion-button>
+    </ion-buttons>
+    <ion-title>Filter</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-label>Filter by date</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-input [value]="dateValue2" placeholder="Start Date"   [(ngModel)]="start_date" required></ion-input>
+          <ion-button fill="clear" id="open-date-input-2">
+            <ion-icon icon="calendar"></ion-icon>
+          </ion-button>
+          <ion-popover trigger="open-date-input-2" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                #popoverDatetime2
+                presentation="date"
+                (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
+                showDefaultButtons="true"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-input [value]="dateValue3" placeholder="End Date"   [(ngModel)]="end_date" required></ion-input>
+          <ion-button fill="clear" id="open-date-input-3">
+            <ion-icon icon="calendar"></ion-icon>
+          </ion-button>
+          <ion-popover trigger="open-date-input-3" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+              min="{{dateTill}}"
+                #popoverDatetime3
+                presentation="date"
+                (ionChange)="dateValue3 = formatDate2(popoverDatetime3.value)"
+              showDefaultButtons="true"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label>Filter by Priority</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-select
+          lines="full"
+          cancelText="Cancel"
+          okText="Okay"
+          placeholder="filter by Priority"
+          [(ngModel)]="selectedPriority"
+        >
+          <ion-select-option *ngFor="let p of taskPriorities" value="{{p.task_priority}}">{{p.task_priority}}</ion-select-option>
+        </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label>Filter by Status</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-select
+          lines="full"
+          cancelText="Cancel"
+          okText="Okay"
+          placeholder="filter by status"
+          [(ngModel)]="selectedStatus"
+        >
+          <ion-select-option *ngFor="let status of taskStatus" value="{{status.task_status}}">{{status.task_status}}</ion-select-option>
+        </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="getFilter()" expand="block">Apply FIlter</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

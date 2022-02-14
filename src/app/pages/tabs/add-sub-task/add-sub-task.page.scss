@@ -1,15 +1,15 @@
-input:focus{
-  border: none !important;
-  outline: none !important;
-  width: 100%;
-  justify-content: center;
-}
-input{
-  border: none !important;
-  width: 100%;
-  justify-content: center;
+// input:focus{
+//   border: none !important;
+//   outline: none !important;
+//   width: 100%;
+//   justify-content: center;
+// }
+// input{
+//   border: none !important;
+//   width: 100%;
+//   justify-content: center;
 
-}
+// }
 ion-select {
   width: 100%;
 
@@ -20,10 +20,17 @@ ion-select {
 ion-popover{
   --width: 90%;
   position: absolute;
-      // left: -20% !important;
-      // transform: translate(-50%, -50%) !important;
+  top: -58% !important;
 }
 
 .error{
   color: red;
+}
+
+.box {
+  border-color: #403E39;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 3px;
+  margin-top: 10px;
 }

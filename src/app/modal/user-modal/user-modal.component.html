@@ -1,0 +1,20 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<!-- <ion-searchbar></ion-searchbar> -->
+    <ion-buttons fill="outline" slot="end">
+			<ion-button (click)="dismiss()">
+				Close
+			</ion-button>
+		</ion-buttons>
+    <ion-title>User List</ion-title>
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list *ngFor="let item of user">
+    <ion-item>
+      <ion-label>
+        <p>{{item.first_name}} {{item.last_name}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

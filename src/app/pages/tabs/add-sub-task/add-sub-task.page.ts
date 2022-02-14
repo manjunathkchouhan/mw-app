@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, IonDatetime, LoadingController } from '@ionic/angular';
+import { AlertController, IonDatetime, LoadingController, NavController } from '@ionic/angular';
 import { format, parseISO } from 'date-fns';
 import { Storage } from '@capacitor/storage';
 // import { IonicSelectableComponent } from 'ionic-selectable';
@@ -49,7 +49,8 @@ export class AddSubTaskPage implements OnInit {
     private routes: Router,
     private activatedRoute: ActivatedRoute,
     private alertController: AlertController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    public navCtrl: NavController
   ) {
     this.taskId = this.activatedRoute.snapshot.paramMap.get('task_id');
     console.log(this.taskId);
@@ -69,7 +70,6 @@ export class AddSubTaskPage implements OnInit {
   async getUserDetails(){
     const token = await Storage.get({ key: TOKEN_KEY });
     if (token && token.value) {
-      // console.log('set token: ', token.value);
       this.token = JSON.parse(token.value);
     }
   }
@@ -105,7 +105,6 @@ export class AddSubTaskPage implements OnInit {
   }
   getAllUsers(){
     this.authenticationService.getUsers().subscribe((res: any) =>{
-      console.log(res);
       if(res){
         this.allUsers = res;
         this.allUsers.forEach(element => {
@@ -122,7 +121,6 @@ export class AddSubTaskPage implements OnInit {
   getAllPriorities(){
     this.authenticationService.getTaskPriorities().subscribe((res: any) =>{
       if(res){
-        console.log(res);
         this.taskPriorities = res;
       }
     });
@@ -137,7 +135,6 @@ export class AddSubTaskPage implements OnInit {
   }
 
  async createSubTaskSubmit(){
-    // console.log(this.createSubTask.value)
     if(this.createSubTask.value.has_attachment === true){
       this.createSubTask.value.has_attachment = 'YES';
     }else {
@@ -148,19 +145,18 @@ export class AddSubTaskPage implements OnInit {
     this.createSubTask.value.user_id = JSON.stringify(this.createSubTask.value.user_id);
     this.createSubTask.value.task_id = this.taskId;
     this.createSubTask.value.created_by = this.token.user_id;
-    console.log(this.createSubTask.value);
     const loading = await this.loadingController.create();
     await loading.present();
     this.authenticationService.addSubTask(this.createSubTask.value).subscribe(async (res: any) =>{
       console.log(res);
       if(res.status === 'SUCCESS'){
         loading.dismiss();
-        const alert = await this.alertController.create({
-          header: 'Added Subtask successfully',
-          buttons: ['OK'],
-        });
-       await alert.present();
-        this.routes.navigate(['/tabs/sub-task']);
+      //   const alert = await this.alertController.create({
+      //     header: 'Added Subtask successfully',
+      //     buttons: ['OK'],
+      //   });
+      //  await alert.present();
+        this.navCtrl.navigateRoot(['/tabs/sub-task']);
       }else {
         loading.dismiss();
         const alert = await this.alertController.create({
@@ -173,13 +169,9 @@ export class AddSubTaskPage implements OnInit {
     });
   }
   onImagePicked(event: any) {
-    //  console.log(event.target.files);
-    // file_name
     const file = event.target.files[0];
-
     const name = event.target.files[0].name;
     const lastDot = name.lastIndexOf('.');
-
     const fileName = name.substring(0, lastDot);
     const ext = name.substring(lastDot + 1);
     this.createSubTask.patchValue({ file_name: fileName });
@@ -187,15 +179,12 @@ export class AddSubTaskPage implements OnInit {
     this.createSubTask.patchValue({ file_extension: '.'+ ext });
     this.createSubTask.get('file_extension')?.updateValueAndValidity();
     const reader = new FileReader();
-
     reader.onload = () => {
-      console.log(reader.result);
       // eslint-disable-next-line prefer-const
       let base64 = reader.result;
       this.createSubTask.patchValue({ base64_file: base64 });
       this.createSubTask.get('base64_file')?.updateValueAndValidity();
     };
-
     reader.readAsDataURL(file);
   }
 }

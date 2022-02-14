@@ -19,7 +19,6 @@
       </ion-item>
       <div *ngIf="(credentials.controls['password'].dirty || credentials.controls['password'].touched) && credentials.controls['password'].errors" class="errors">
         <span *ngIf="credentials.controls['password'].errors?.required">Password is required</span>
-        <!-- <span *ngIf="credentials.controls['password'].errors?.minlength">Password needs to be 6 characters</span> -->
       </div>
     </div>
     <ion-button type="submit" expand="block" [disabled]="!credentials.valid">Log in</ion-button>

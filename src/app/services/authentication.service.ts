@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap, take } from 'rxjs/operators';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { Storage } from '@capacitor/storage';
 const TOKEN_KEY = 'my-token';
@@ -11,15 +12,23 @@ const TOKEN_KEY = 'my-token';
 })
 export class AuthenticationService {
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+  taskList: BehaviorSubject<any> =  new BehaviorSubject<any>(null);
+  subTaskList: BehaviorSubject<any> =  new BehaviorSubject<any>(null);
   token;
   constructor(private http: HttpClient) {
     this.loadToken();
   }
 
+  get getTaskData(){
+    return this.taskList.asObservable();
+  }
+  get getSubTaskData(){
+    return this.subTaskList.asObservable();
+  }
+
   async loadToken() {
     const token = await Storage.get({ key: TOKEN_KEY });
     if (token && token.value) {
-      console.log('set token: ', token.value);
       this.token = JSON.parse(token.value);
       this.isAuthenticated.next(true);
     } else {
@@ -29,18 +38,19 @@ export class AuthenticationService {
 
   login(credentials) {
     console.log(credentials);
-    return this.http.post(`http://13.232.183.208/mw_team_app/mobile_app_apis/user_login.php?method=submitLogin`, credentials);
-    // .pipe(
-    //   map((data: any) => data
-    //   ),
-    //   switchMap(token =>{
-    //     console.log(token);
-    //     return from(Storage.set({key: TOKEN_KEY, value: JSON.stringify(token)}));
-    //   }),
-    //   tap(_ => {
-    //     this.isAuthenticated.next(true);
-    //   })
-    // );
+    return this.http.post(`http://13.232.183.208/mw_team_app/mobile_app_apis/user_login.php?method=submitLogin`, credentials)
+    .pipe(
+      map((data: any) => {
+        if(data.status === 'SUCCESS'){
+          Storage.set({key: TOKEN_KEY, value: JSON.stringify(data.data)});
+        }
+        return data;
+      }),
+      tap(_ => {
+        console.log('is authenticated');
+        this.isAuthenticated.next(true);
+      })
+    );
   }
 
   //submitLogout
@@ -59,18 +69,35 @@ export class AuthenticationService {
   }
 
   getTasks(user){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getTasksList',user);
+    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getTasksList',user)
+    .pipe(map(resData =>{
+      console.log(resData);
+      return resData;
+    }),
+    tap(task =>{
+      this.taskList.next(task);
+    }),
+    );
   }
-
-  // logout(): Promise<void> {
-  //   this.isAuthenticated.next(false);
-  //   return Storage.remove({key: TOKEN_KEY});
-  // }
   getTaskPriorities(){
     return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskPriorities');
   }
   addTask(taskData){
+    let tasks;
     return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=addNewTask',taskData);
+    // .pipe(switchMap(resData =>{
+    //   console.log(resData);
+    //   tasks =  resData;
+    //   return this.getTaskData;
+    // }),
+    // take(1),
+    // tap(task =>{
+    //   console.log(task);
+    //   // const newTask = tasks.data;
+    //   this.taskList.next(task.concat(tasks.data));
+    //   return tasks;
+    // }),
+    // );
   }
   updateTask(updatedTaskData){
     return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=updateTaskStatus', updatedTaskData);
@@ -82,9 +109,7 @@ export class AuthenticationService {
     return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/subtasks.php?method=addSubTask',subTaskData);
   }
   updateSubTask(updatedSubTaskData){
-
-
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=updateSubTask', updatedSubTaskData);
+    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=updateSubTaskStatus', updatedSubTaskData);
   }
   deleteSubTask(subTaskId){
     return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=deleteSubTask', subTaskId);
@@ -106,6 +131,14 @@ export class AuthenticationService {
   }
   getSubTaskList(userData){
     return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getSubTasksList',userData);
+    // .pipe(map(resData =>{
+    //   console.log(resData);
+    //   return resData;
+    // }),
+    // tap(task =>{
+    //   this.subTaskList.next(task);
+    // }),
+    // );
   }
   getUsersForSubTask(){
     return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/subtasks.php?method=getUsersForSubTask');
@@ -113,8 +146,33 @@ export class AuthenticationService {
   getSubTaskDetails(subTaskId){
     return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getSubTaskDetails',subTaskId);
   }
-//http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusForUpdate
- getTaskStatusForUpdate(){
-  return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusForUpdate');
+ getTaskStatusForUpdate(roleId){
+  return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusForUpdate',roleId);
+ }
+ taskChangeRequest(changeRequestData){
+  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=requestForChangeInTask',changeRequestData);
+ }
+ subTaskChangeRequest(ChangeRequestData){
+  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=requestForChangeInSubTask', ChangeRequestData);
+ }
+ getUserListForChangeRequest(taskId){
+  return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getUsersInTask', taskId);
+ }
+ getUserListSubTaskChangeRequest(subTaskId){
+  return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getUsersInSubTask', subTaskId);
+ }
+ approveTask(approveData){
+   console.log(approveData);
+   return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=approveCompletedTask', approveData);
+ }
+ //getTaskStatusAndPrioritiesForFilter
+ getFilterApi(){
+  return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusAndPrioritiesForFilter');
+ }
+ getFilter(userData){
+  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getFilteredTaskList', userData);
+ }
+ getSubtaskFilter(userData){
+  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getFilteredSubTaskList', userData);
  }
 }

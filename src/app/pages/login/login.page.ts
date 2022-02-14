@@ -15,7 +15,9 @@ const TOKEN_KEY = 'my-token';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    null
+  );
   credentials: FormGroup;
   deviceID;
   constructor(
@@ -24,16 +26,14 @@ export class LoginPage implements OnInit {
     private alertController: AlertController,
     private router: Router,
     private loadingController: LoadingController
-
   ) {
     this.getDevice();
-   }
-   getDevice = async () => {
+  }
+  getDevice = async () => {
     const info = await Device.getId();
     console.log(info.uuid);
     this.deviceID = info.uuid;
   };
-
 
   ngOnInit() {
     this.credentials = this.fb.group({
@@ -47,17 +47,15 @@ export class LoginPage implements OnInit {
     const loginData = {
       email: this.credentials.value.email,
       password: this.credentials.value.password,
-      device_id: this.deviceID
+      device_id: this.deviceID,
     };
     console.log(loginData);
-    this.authService.login(loginData).subscribe(async (res: any) =>{
+    this.authService.login(loginData).subscribe(async (res: any) => {
       console.log(res);
-      if(res.status === 'SUCCESS'){
+      if (res.status === 'SUCCESS') {
         await loading.dismiss();
-        Storage.set({key: TOKEN_KEY, value: JSON.stringify(res.data)});
         this.router.navigateByUrl('/tabs', { replaceUrl: true });
-        this.isAuthenticated.next(true);
-      }else if(res.status === 'FAILED') {
+      } else if (res.status === 'FAILED') {
         await loading.dismiss();
         const alert = await this.alertController.create({
           header: 'Login failed',
@@ -66,29 +64,6 @@ export class LoginPage implements OnInit {
         });
         await alert.present();
       }
-    }
-      // async (res) => {
-      //   console.log();
-      //   // if()
-
-      // }, async (res) => {
-      //   await loading.dismiss();
-      //   const alert = await this.alertController.create({
-      //     header: 'Login failed',
-      //     message: res.error.error,
-      //     buttons: ['OK'],
-      //   });
-
-      //   await alert.present();
-      // }
-    );
+    });
   }
-
-  // get email(){
-  //   return this.credentials.get('email');
-  // }
-  // get password() {
-  //   return this.credentials.get('password');
-  // }
-
 }

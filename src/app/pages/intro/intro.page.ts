@@ -12,18 +12,16 @@ import { INTRO_KEY } from 'src/app/guards/intro.guard';
 })
 export class IntroPage implements OnInit {
   @ViewChild(IonSlides) slides: IonSlides;
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   next() {
     this.slides.slideNext();
   }
 
   async start() {
-    await Storage.set({key: INTRO_KEY, value: 'true'});
-    this.router.navigateByUrl('/login', { replaceUrl:true });
+    await Storage.set({ key: INTRO_KEY, value: 'true' });
+    this.router.navigateByUrl('/login', { replaceUrl: true });
   }
-
 }

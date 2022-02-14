@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { TaskDetailsPageRoutingModule } from './task-details-routing.module';
 
 import { TaskDetailsPage } from './task-details.page';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 
 @NgModule({
@@ -17,6 +18,9 @@ import { TaskDetailsPage } from './task-details.page';
     TaskDetailsPageRoutingModule,
     ReactiveFormsModule,
     FormsModule
+  ],
+  providers: [
+    FileOpener
   ],
   declarations: [TaskDetailsPage]
 })

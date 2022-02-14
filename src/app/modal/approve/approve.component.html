@@ -1,0 +1,17 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<!-- <ion-searchbar></ion-searchbar> -->
+    <ion-buttons fill="outline" slot="end">
+			<ion-button (click)="dismiss()">
+				Close
+			</ion-button>
+		</ion-buttons>
+    <ion-title>Approve Task</ion-title>
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-item class="box">
+      <ion-textarea [(ngModel)]="description" placeholder="Description"></ion-textarea>
+    </ion-item>
+    <ion-button ion-button type="button"  expand="full" (click)="approveTaskForm()">Submit</ion-button>
+</ion-content>

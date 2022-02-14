@@ -1,18 +1,44 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-searchbar
-    animated="true"
-    debounce="800"
-    #searchInput
-    [(ngModel)]="filterTerm"  slot="start"></ion-searchbar>
-    <!-- <ion-icon name="add-sharp" routerLink="/tabs/add-task" slot="end" style="font-weight: 500; font-size: 50px;"></ion-icon> -->
-    <!-- <ion-title>  </ion-title> -->
+      animated="true"
+      debounce="800"
+      #searchInput
+      [(ngModel)]="filterTerm"
+      slot="start"
+    ></ion-searchbar>
+    <ion-icon
+      (click)="filterShow(filter)"
+      name="filter-outline"
+      slot="end"
+      style="font-weight: 500; font-size: 40px"
+    ></ion-icon>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="getAllTasks()" pullMin="100" pullMax="200">
+    <ion-refresher-content
+    pullingIcon="arrow-down"
+    pullingText="Pull to refresh"
+    refreshingSpinner="bubbles"
+    refreshingText="Refreshing....."></ion-refresher-content>
+  </ion-refresher>
 
-  <ion-button *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'" expand="full" routerLink="/tabs/add-task">Add Task</ion-button>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <!-- <section> -->
+          <ion-button class="b"
+          *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'"
+          expand="block"
+          routerLink="/tabs/add-task"
+          >Add Task</ion-button>
+        <!-- </section> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <ion-list *ngFor="let tasks of tasksList | filter:filterTerm">
     <ion-item (click)="onTaskDetails(tasks?.task_id)">
       <ion-grid>
@@ -20,34 +46,39 @@
           <ion-col size="12">
             <div><ion-label>{{tasks?.task_title}}</ion-label></div>
           </ion-col>
-          <!-- <ion-col size="2">
-            <div><ion-icon name="list-outline"></ion-icon></div>
-          </ion-col> -->
         </ion-row>
         <ion-row>
-          <ion-col size="3">
+          <ion-col size="4">
+           <ion-text>{{tasks?.project_title}}</ion-text>
+          </ion-col>
+          <ion-col size="2">
             <div>
-              <ion-progress-bar
-                value="{{tasks?.task_completion}}"
-                class="ion-padding-horizontal"
-              ></ion-progress-bar>
+              <div>
+                <ion-progress-bar
+                  value="{{tasks?.task_completion/100}}"
+                  class="ion-padding-horizontal"
+                ></ion-progress-bar>
+              </div>
+
             </div>
           </ion-col>
-          <ion-col size="3">
-            <div>
-              <ion-text class="ion-padding-horizontal"
-                >{{tasks?.task_completion}}%</ion-text
-              >
-            </div>
+          <ion-col size="2">
+            <ion-text
+            >{{tasks?.task_completion}}%</ion-text
+          >
           </ion-col>
-            <ion-col size="4" *ngIf="tasks?.days_left >= 1">
-              <span class="sp">Days Left: </span>{{tasks?.days_left}}
-            </ion-col>
-            <ion-col size="4" *ngIf="tasks?.days_left < 1">
-              <span class="sp">Overdue: </span> <span *ngIf="tasks?.days_left < 1 "><strong style="color:red">{{-tasks?.days_left}}</strong></span>
-            </ion-col>
-          <ion-col size="2" class="ion-text-end">
-            <div *ngIf="tasks?.days_left > 5">
+          <ion-col size="3" *ngIf="tasks?.days_left >= 1">
+            <span class="sp">Days Left: </span
+            ><strong>{{tasks?.days_left}}</strong>
+          </ion-col>
+          <ion-col size="3" *ngIf="tasks?.days_left < 1">
+            <span class="sp">Overdue: </span>
+            <span *ngIf="tasks?.days_left < 1 "
+              ><strong style="color: red">{{-tasks?.days_left}}</strong></span
+            >
+          </ion-col>
+          <ion-col size="1" class="ion-text-end">
+            <!-- <div *ngIf="tasks?.task_priority === 5">
               <ion-icon style="color: green;" name="radio-button-on" ></ion-icon>
             </div>
             <div *ngIf="tasks?.days_left >= 2 && tasks?.days_left <= 5">
@@ -55,29 +86,23 @@
             </div>
             <div *ngIf="tasks?.days_left < 2">
               <ion-icon style="color: red;" name="radio-button-on" ></ion-icon>
+            </div> -->
+            <div *ngIf="tasks?.task_priority === 'LOW'">
+              <ion-icon style="color: green" name="radio-button-on"></ion-icon>
+            </div>
+            <div *ngIf="tasks?.task_priority === 'MEDIUM'">
+              <ion-icon style="color: orange" name="radio-button-on"></ion-icon>
+            </div>
+            <div *ngIf="tasks?.task_priority === 'HIGH'">
+              <ion-icon style="color: red" name="radio-button-on"></ion-icon>
             </div>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>
   </ion-list>
-
-  <!-- <ng-container >
-      <ion-item >
-        <ion-icon name="list-outline"></ion-icon>&nbsp;&nbsp;
-        <ion-label>
-          <h4>{{tasks?.task_title}}</h4>
-          <p class="ion-text-wrap">kgnk</p>
-          <ion-text><p>₹ 1000</p></ion-text>
-        </ion-label>
-        <ion-row>
-          <ion-progress-bar value="{{tasks?.task_completion}}"  class="ion-padding-horizontal"></ion-progress-bar>
-          <ion-text class="ion-padding-horizontal">50%</ion-text>
-        </ion-row>
-        <ion-row>
-          <ion-text class="ion-padding-horizontal">{{tasks?.task_completion}}%</ion-text>
-        </ion-row>
-      </ion-item>
-    </ng-container> -->
+  <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher> -->
 
 </ion-content>

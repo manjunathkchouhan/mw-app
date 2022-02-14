@@ -9,27 +9,22 @@
 
 <ion-content>
   <form [formGroup]="changeRequest" (ngSubmit)="changeRequestForm()">
-    <ion-item>
-      <ion-select placeholder="Change Request" formControlName="changeRequest">
-        <ion-select-option value="d">Extend Date</ion-select-option>
-        <ion-select-option value="u">Add Users</ion-select-option>
-        <ion-select-option value="r">Remove Users</ion-select-option>
+    <ion-item class="box">
+      <ion-select placeholder="Change Request Type" formControlName="change_request_type">
+        <ion-select-option *ngFor="let item of changeRequestTypes" [value]="item.request_type">{{item.request_type}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="changeRequest.get('changeRequest').value === 'u'">
-      <ion-select placeholder="Select Users" formControlName="addUsers" multiple="true">
-        <ion-select-option value="m">Manju</ion-select-option>
-        <ion-select-option value="v">Vani</ion-select-option>
-      </ion-select>
-
-    </ion-item>
-    <ion-item *ngIf="changeRequest.get('changeRequest').value === 'r'">
-      <ion-select placeholder="Remove Users" formControlName="removeUsers"  multiple="true">
-        <ion-select-option value="m">Ani</ion-select-option>
-        <ion-select-option value="v">Manu</ion-select-option>
+    <ion-item *ngIf="changeRequest.get('change_request_type').value === 'Add Users'" class="box">
+      <ion-select placeholder="Select Users" formControlName="user_list" multiple="true">
+        <ion-select-option  *ngFor="let user of usersNotInTask" [value]="user.user_id">{{user.first_name}} {{user.last_name}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="changeRequest.get('change_request_type').value === 'Remove Users'" class="box">
+      <ion-select placeholder="Remove Users" formControlName="user_list"  multiple="true" >
+        <ion-select-option *ngFor="let user of usersInTask" [value]="user.user_id" [attr.selected]="true">{{user.first_name}} {{user.last_name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="box">
       <ion-textarea formControlName="description" placeholder="Description"></ion-textarea>
     </ion-item>
     <ion-button ion-button type="submit" [disabled]="!changeRequest.valid" expand="full">Submit</ion-button>

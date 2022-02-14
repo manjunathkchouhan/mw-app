@@ -25,6 +25,7 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+
 ion-title{
   font-weight: bold;
 }
@@ -47,3 +48,15 @@ h6{
 .borderBottomSmall {
   border-bottom: 0.1rem solid var(--ion-color-light);
 }
+
+.box {
+  border-color: #403E39;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 3px;
+  margin-top: 10px;
+}
+// ion-content{
+//   --ion-background-color:#111D12;
+//   // background-color: lightcoral !important;
+// }

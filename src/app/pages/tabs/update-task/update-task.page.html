@@ -9,19 +9,19 @@
 
 <ion-content padding>
   <form [formGroup]="updateTask" (ngSubmit)="updateTaskForm()">
-    <ion-item style="margin-top: 40px;">
+    <ion-item  class="box">
       <ion-select placeholder="Task Status" formControlName="task_status">
         <ion-select-option *ngFor="let status of taskStatus" [value]="status?.task_status">{{status?.task_status}}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item style="margin-top: 20px;">
+    <ion-item class="box">
       <ion-textarea formControlName="description" placeholder="Description"></ion-textarea>
     </ion-item>
-    <ion-item style="margin-top: 10px;">
+    <ion-item class="box">
       <ion-label>File Attachment</ion-label>
       <ion-checkbox formControlName="has_attachment"></ion-checkbox>
     </ion-item>
-    <ion-item *ngIf="updateTask.get('has_attachment').value === true" style="margin-top: 10px;">
+    <ion-item *ngIf="updateTask.get('has_attachment').value === true" class="box">
       <input type="file"  (change)="onImagePicked($event)" accept=".pdf, .doc, .docx, .text, .excel, .jpg, .jpeg, .bmp, .png, .eps, .gif, .tif, .tiff">
     </ion-item>
     <ion-button ion-button type="submit" [disabled]="!updateTask.valid" expand="full" >Submit</ion-button>

@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="primary"  mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/task" slot="start"></ion-back-button>
+    </ion-buttons>
+    <ion-title>update-sub-task</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="updateSubTask" (ngSubmit)="updateSubTaskForm()">
+    <ion-item  class="box">
+      <ion-select placeholder="Subtask Status" formControlName="task_status">
+        <ion-select-option *ngFor="let status of taskStatus" [value]="status?.task_status">{{status?.task_status}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item  class="box">
+      <ion-textarea formControlName="description" placeholder="Description"></ion-textarea>
+    </ion-item>
+    <ion-item  class="box">
+      <ion-label>File Attachment</ion-label>
+      <ion-checkbox formControlName="has_attachment"></ion-checkbox>
+    </ion-item>
+    <ion-item *ngIf="updateSubTask.get('has_attachment').value === true"  class="box">
+      <input type="file"  (change)="onImagePicked($event)" accept=".pdf, .doc, .docx, .text, .excel, .jpg, .jpeg, .bmp, .png, .eps, .gif, .tif, .tiff">
+    </ion-item>
+    <ion-button ion-button type="submit" [disabled]="!updateSubTask.valid" expand="full" >Submit</ion-button>
+  </form>
+</ion-content>

@@ -26,10 +26,12 @@ export class ProfilePage implements OnInit {
     this.getUserDetails();
   }
   async getUserDetails(){
+    const loading = await this.loadingController.create();
+    await loading.present();
     const token = await Storage.get({ key: TOKEN_KEY });
     if (token && token.value) {
+      await loading.dismiss();
       this.token = JSON.parse(token.value);
-      console.log('set token: ', this.token);
     }
   }
 
@@ -41,7 +43,6 @@ export class ProfilePage implements OnInit {
     await loading.present();
     this.authService.submitLogout(userId).subscribe(
       async (res) => {
-        console.log(res);
         await loading.dismiss();
         const alert = await this.alertController.create({
           header: 'User Logout successfully',

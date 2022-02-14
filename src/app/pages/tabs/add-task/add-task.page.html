@@ -13,32 +13,19 @@
       <ion-row>
         <ion-col>
           <div padding>
-            <ion-item>
+            <ion-item class="box">
+              <ion-label position="floating">Task Title *</ion-label>
               <ion-input
                 type="text"
                 formControlName="task_title"
-                placeholder="Task Title"
                 required></ion-input>
             </ion-item>
             <span class="error ion-padding" *ngIf="!createTask.controls['task_title'].valid && createTask.controls['task_title'].touched">
               Task title is required.
             </span>
-            <ion-item>
-              <!-- <input
-                list="projects"
-                placeholder="Choose Projects"
-                formControlName="project_id"
-                required/>
-              <datalist id="projects">
-                <option *ngFor="let pItem of allProjects">
-                  {{pItem.project_title}}
-                </option>
-              </datalist> -->
-              <!-- <ionic-selectable item-content formControlName="project_id" itemValueField="id" itemTextField="name" items="ports" canSearch="true"
-              (onChange)="projectChange()">
-             </ionic-selectable> -->
+            <ion-item class="box">
+              <ion-label position="floating">Select Projects *</ion-label>
               <ion-select
-              placeholder="Choose Projects"
               formControlName="project_id"
               required>
               <ion-select-option
@@ -50,17 +37,17 @@
             </ion-select>
             </ion-item>
             <span  class="error ion-padding" *ngIf="!createTask.controls['project_id'].valid && createTask.controls['project_id'].touched">
-              Project required.
+              Project is required.
             </span>
-            <ion-item>
+            <ion-item class="box">
+              <ion-label position="floating">Description</ion-label>
               <ion-textarea
                 formControlName="description"
-                placeholder="Description"
                 ></ion-textarea>
             </ion-item>
-            <ion-item>
+            <ion-item class="box">
+              <ion-label position="floating">Select Users *</ion-label>
               <ion-select
-                placeholder="Select Users"
                 formControlName="user_id"
                 multiple="true"
                 required>
@@ -73,11 +60,11 @@
               </ion-select>
             </ion-item>
             <span class="error ion-padding" *ngIf="!createTask.controls['user_id'].valid && createTask.controls['user_id'].touched">
-              User required.
+              User is required.
             </span>
-            <ion-item>
+            <ion-item class="box">
+              <ion-label position="floating">Select Task Priority *</ion-label>
               <ion-select
-                placeholder="Select Task Priority"
                 formControlName="task_priority"
                 required>
                 <ion-select-option
@@ -89,11 +76,11 @@
               </ion-select>
             </ion-item>
             <span class="error ion-padding" *ngIf="!createTask.controls['task_priority'].valid && createTask.controls['task_priority'].touched">
-              Task Priority is required.
+              Task priority is required.
             </span>
-            <ion-item>
+            <ion-item class="box">
+              <ion-label position="floating">Select Task Interval *</ion-label>
               <ion-select
-                placeholder="Select Task Interval"
                 formControlName="task_interval"
                 required>
                 <ion-select-option
@@ -105,51 +92,61 @@
               </ion-select>
             </ion-item>
             <span class="error ion-padding" *ngIf="!createTask.controls['task_interval'].valid && createTask.controls['task_interval'].touched">
-              Task Interval is required.
+              Task interval is required.
             </span>
-            <ion-item>
-              <ion-input [value]="dateValue2" placeholder="Choose Start Date"  formControlName="start_date" required></ion-input>
-              <ion-button fill="clear" id="open-date-input-2">
-                <ion-icon icon="calendar"></ion-icon>
-              </ion-button>
-              <ion-popover trigger="open-date-input-2" show-backdrop="false">
-                <ng-template>
-                  <ion-datetime
-                  min="{{dateTill}}"
-                    #popoverDatetime2
-                    presentation="date"
-                    (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
-                  ></ion-datetime>
-                </ng-template>
-              </ion-popover>
-            </ion-item>
-            <span class="error ion-padding" *ngIf="!createTask.controls['start_date'].valid && createTask.controls['start_date'].touched">
-              Start Date is required.
-            </span>
-            <ion-item>
-              <ion-input [value]="dateValue3" placeholder="Choose End Date"  formControlName="end_date" required></ion-input>
-              <ion-button fill="clear" id="open-date-input-3">
-                <ion-icon icon="calendar"></ion-icon>
-              </ion-button>
-              <ion-popover trigger="open-date-input-3" show-backdrop="false">
-                <ng-template>
-                  <ion-datetime
-                  min="{{dateTill}}"
-                    #popoverDatetime3
-                    presentation="date"
-                    (ionChange)="dateValue3 = formatDate2(popoverDatetime3.value)"
-                  ></ion-datetime>
-                </ng-template>
-              </ion-popover>
-            </ion-item>
+            <ion-grid class="box">
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-input [value]="dateValue2" placeholder="Choose Start Date"  formControlName="start_date" required></ion-input>
+                    <ion-button fill="clear" id="open-date-input-2">
+                      <ion-icon icon="calendar"></ion-icon>
+                    </ion-button>
+                    <ion-popover trigger="open-date-input-2" show-backdrop="false">
+                      <ng-template>
+                        <ion-datetime
+                        min="{{dateTill}}"
+                          #popoverDatetime2
+                          presentation="date"
+                          (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
+                          showDefaultButtons="true"></ion-datetime>
+                      </ng-template>
+                    </ion-popover>
+                  </ion-item>
+                  <span class="error ion-padding" *ngIf="!createTask.controls['start_date'].valid && createTask.controls['start_date'].touched">
+                    Start date is required.
+                  </span>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-input [value]="dateValue3" placeholder="Choose End Date"  formControlName="end_date" required></ion-input>
+                    <ion-button fill="clear" id="open-date-input-3">
+                      <ion-icon icon="calendar"></ion-icon>
+                    </ion-button>
+                    <ion-popover trigger="open-date-input-3" show-backdrop="false">
+                      <ng-template>
+                        <ion-datetime
+                        min="{{dateTill}}"
+                          #popoverDatetime3
+                          presentation="date"
+                          (ionChange)="dateValue3 = formatDate2(popoverDatetime3.value)"
+                        showDefaultButtons="true"></ion-datetime>
+                      </ng-template>
+                    </ion-popover>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
             <span class="error ion-padding" *ngIf="!createTask.controls['end_date'].valid && createTask.controls['end_date'].touched">
-              End Date is required.
+              End date is required.
             </span>
-            <ion-item>
+
+            <ion-item class="box">
               <ion-label>File Attachment</ion-label>
               <ion-checkbox formControlName="has_attachment"></ion-checkbox>
             </ion-item>
-            <ion-item *ngIf="createTask.get('has_attachment').value === true">
+            <ion-item *ngIf="createTask.get('has_attachment').value === true" class="box">
               <input type="file"  (change)="onImagePicked($event)" accept=".pdf, .doc, .docx, .text, .excel, .jpg, .jpeg, .bmp, .png, .eps, .gif, .tif, .tiff">
             </ion-item>
             <ion-button
