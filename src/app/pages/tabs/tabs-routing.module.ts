@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -40,7 +41,7 @@ const routes: Routes = [
     loadChildren: () => import('./task-details/task-details.module').then( m => m.TaskDetailsPageModule)
   },
   {
-    path: 'add-sub-task/:task_id',
+    path: 'add-sub-task/:task_id/:task_endDate',
     loadChildren: () => import('./add-sub-task/add-sub-task.module').then( m => m.AddSubTaskPageModule)
   },
   {
@@ -62,6 +63,38 @@ const routes: Routes = [
   {
     path: 'subtask-change-request/:sub_task_id',
     loadChildren: () => import('./subtask-change-request/subtask-change-request.module').then( m => m.SubtaskChangeRequestPageModule)
+  },
+  {
+    path: 'complited-task-list',
+    loadChildren: () => import('./complited-task-list/complited-task-list.module').then( m => m.ComplitedTaskListPageModule)
+  },
+  {
+    path: 'pending-task-list',
+    loadChildren: () => import('./pending-task-list/pending-task-list.module').then( m => m.PendingTaskListPageModule)
+  },
+  {
+    path: 'complited-subtask-list',
+    loadChildren: () => import('./complited-subtask-list/complited-subtask-list.module').then( m => m.ComplitedSubtaskListPageModule)
+  },
+  {
+    path: 'pending-subtask-list',
+    loadChildren: () => import('./pending-subtask-list/pending-subtask-list.module').then( m => m.PendingSubtaskListPageModule)
+  },
+  {
+    path: 'task-change-request-list',
+    loadChildren: () => import('./task-change-request-list/task-change-request-list.module').then( m => m.TaskChangeRequestListPageModule)
+  },
+  {
+    path: 'subtask-change-request-list',
+    loadChildren: () => import('./subtask-change-request-list/subtask-change-request-list.module').then( m => m.SubtaskChangeRequestListPageModule)
+  },
+  {
+    path: 'task-change-request-details/:task_change_request_id',
+    loadChildren: () => import('./task-change-request-details/task-change-request-details.module').then( m => m.TaskChangeRequestDetailsPageModule)
+  },
+  {
+    path: 'subtask-change-request-details/:subtask_change_request_id',
+    loadChildren: () => import('./subtask-change-request-details/subtask-change-request-details.module').then( m => m.SubtaskChangeRequestDetailsPageModule)
   }
 ];
 

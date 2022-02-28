@@ -39,11 +39,6 @@ export class FilterSubtaskComponent implements OnInit {
      }
 
     ngOnInit() {
-      console.log(this.taskList);
-      // this.today = new Date(this.start_date);
-      // this.today.setDate(this.today.getDate());
-      // this.dateTill = this.today.toISOString().substring(0, 10);
-      // console.log(this.today);
       this.getTaskStatus();
     }
     dismiss() {
@@ -51,7 +46,6 @@ export class FilterSubtaskComponent implements OnInit {
     }
     getTaskStatus(){
       this.authenticationService.getFilterApi().subscribe((res: any) =>{
-        console.log(res);
         if(res){
           this.taskPriorities = res.task_priorities;
           this.taskStatus= res.task_status;
@@ -67,9 +61,7 @@ export class FilterSubtaskComponent implements OnInit {
     formatDate(value: string) {
       this.today = new Date(value);
       this.today.setDate(this.today.getDate());
-      console.log( this.today);
       this.dateTill = this.today.toISOString().substring(0, 10);
-       console.log(this.dateTill);
       return format(parseISO(value), 'MMM dd yyyy');
     }
     formatDate2(value: string){
@@ -85,11 +77,9 @@ export class FilterSubtaskComponent implements OnInit {
       selected_priority: this.selectedPriority,
       selected_status: this.selectedStatus
     };
-    console.log(userData);
     const loading = await this.loadingController.create();
     await loading.present();
     this.authenticationService.getSubtaskFilter(userData).subscribe(async (res: any) =>{
-      console.log(res);
       if(res.status === 'FAILED'){
         loading.dismiss();
         const alert = await this.alertController.create({

@@ -5,17 +5,23 @@ import { HttpClient } from '@angular/common/http';
 import { map, tap, switchMap, take } from 'rxjs/operators';
 import { BehaviorSubject, Observable, from } from 'rxjs';
 import { Storage } from '@capacitor/storage';
+import { ApiConfigService } from '../config/api-config.service';
 const TOKEN_KEY = 'my-token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
+  url: string;
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
   taskList: BehaviorSubject<any> =  new BehaviorSubject<any>(null);
   subTaskList: BehaviorSubject<any> =  new BehaviorSubject<any>(null);
   token;
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private apiConfigService: ApiConfigService
+    ) {
+    this.url = apiConfigService.api_url;
     this.loadToken();
   }
 
@@ -55,7 +61,7 @@ export class AuthenticationService {
 
   //submitLogout
   submitLogout(userId){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/user_login.php?method=submitLogout',userId).pipe
+    return this.http.post(this.url + '/mobile_app_apis/user_login.php?method=submitLogout',userId).pipe
     (map((data: any) => data),
     switchMap(tokenClear =>{
       if(tokenClear.status === 'SUCCESS'){
@@ -69,7 +75,7 @@ export class AuthenticationService {
   }
 
   getTasks(user){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getTasksList',user)
+    return this.http.post(this.url + '/mobile_app_apis/tasks.php?method=getTasksList',user)
     .pipe(map(resData =>{
       console.log(resData);
       return resData;
@@ -80,11 +86,11 @@ export class AuthenticationService {
     );
   }
   getTaskPriorities(){
-    return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskPriorities');
+    return this.http.get(this.url + '/admin_apis/required_data.php?method=getTaskPriorities');
   }
   addTask(taskData){
-    let tasks;
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=addNewTask',taskData);
+    // let tasks;
+    return this.http.post(this.url + '/admin_apis/tasks.php?method=addNewTask',taskData);
     // .pipe(switchMap(resData =>{
     //   console.log(resData);
     //   tasks =  resData;
@@ -100,37 +106,37 @@ export class AuthenticationService {
     // );
   }
   updateTask(updatedTaskData){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=updateTaskStatus', updatedTaskData);
+    return this.http.post(this.url + '/mobile_app_apis/tasks.php?method=updateTaskStatus', updatedTaskData);
   }
   deleteTask(taskId){
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=updateTask', taskId);
+    return this.http.post(this.url + '/admin_apis/tasks.php?method=updateTask', taskId);
   }
   addSubTask(subTaskData){
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/subtasks.php?method=addSubTask',subTaskData);
+    return this.http.post(this.url + '/admin_apis/subtasks.php?method=addSubTask',subTaskData);
   }
   updateSubTask(updatedSubTaskData){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=updateSubTaskStatus', updatedSubTaskData);
+    return this.http.post(this.url + '/mobile_app_apis/subtasks.php?method=updateSubTaskStatus', updatedSubTaskData);
   }
   deleteSubTask(subTaskId){
-    return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=deleteSubTask', subTaskId);
+    return this.http.post(this.url + '/admin_apis/tasks.php?method=deleteSubTask', subTaskId);
   }
   getUsers(){
-    return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=getUsersForTask');
+    return this.http.get(this.url + '/admin_apis/tasks.php?method=getUsersForTask');
   }
   getProjectsTask(){
-    return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/tasks.php?method=getProjectsForTask');
+    return this.http.get(this.url + '/admin_apis/tasks.php?method=getProjectsForTask');
   }
   getTaskIntervals(){
-    return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskIntervals');
+    return this.http.get(this.url + '/admin_apis/required_data.php?method=getTaskIntervals');
   }
   getAllTasks(loggedUser){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getTasksList', loggedUser);
+    return this.http.post(this.url + '/mobile_app_apis/tasks.php?method=getTasksList', loggedUser);
   }
   getTaskDetails(taskId){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getTaskDetails',taskId);
+    return this.http.post(this.url + '/mobile_app_apis/tasks.php?method=getTaskDetails',taskId);
   }
   getSubTaskList(userData){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getSubTasksList',userData);
+    return this.http.post(this.url + '/mobile_app_apis/subtasks.php?method=getSubTasksList',userData);
     // .pipe(map(resData =>{
     //   console.log(resData);
     //   return resData;
@@ -141,38 +147,81 @@ export class AuthenticationService {
     // );
   }
   getUsersForSubTask(){
-    return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/subtasks.php?method=getUsersForSubTask');
+    return this.http.get(this.url + '/admin_apis/subtasks.php?method=getUsersForSubTask');
   }
   getSubTaskDetails(subTaskId){
-    return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getSubTaskDetails',subTaskId);
+    return this.http.post(this.url + '/mobile_app_apis/subtasks.php?method=getSubTaskDetails',subTaskId);
   }
  getTaskStatusForUpdate(roleId){
-  return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusForUpdate',roleId);
+  return this.http.post(this.url + '/admin_apis/required_data.php?method=getTaskStatusForUpdate',roleId);
  }
  taskChangeRequest(changeRequestData){
-  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=requestForChangeInTask',changeRequestData);
+  return this.http.post(this.url + '/mobile_app_apis/tasks.php?method=requestForChangeInTask',changeRequestData);
  }
  subTaskChangeRequest(ChangeRequestData){
-  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=requestForChangeInSubTask', ChangeRequestData);
+  return this.http.post(this.url + '/mobile_app_apis/subtasks.php?method=requestForChangeInSubTask', ChangeRequestData);
  }
  getUserListForChangeRequest(taskId){
-  return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getUsersInTask', taskId);
+  return this.http.post(this.url + '/admin_apis/required_data.php?method=getUsersInTask', taskId);
  }
  getUserListSubTaskChangeRequest(subTaskId){
-  return this.http.post('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getUsersInSubTask', subTaskId);
+  return this.http.post(this.url + '/admin_apis/required_data.php?method=getUsersInSubTask', subTaskId);
  }
  approveTask(approveData){
    console.log(approveData);
-   return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=approveCompletedTask', approveData);
+   return this.http.post(this.url + '/mobile_app_apis/tasks.php?method=approveCompletedTask', approveData);
  }
  //getTaskStatusAndPrioritiesForFilter
  getFilterApi(){
-  return this.http.get('http://13.232.183.208/mw_team_app/admin_apis/required_data.php?method=getTaskStatusAndPrioritiesForFilter');
+  return this.http.get(this.url + '/admin_apis/required_data.php?method=getTaskStatusAndPrioritiesForFilter');
  }
  getFilter(userData){
-  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/tasks.php?method=getFilteredTaskList', userData);
+  return this.http.post(this.url + '/mobile_app_apis/tasks.php?method=getFilteredTaskList', userData);
  }
  getSubtaskFilter(userData){
-  return this.http.post('http://13.232.183.208/mw_team_app/mobile_app_apis/subtasks.php?method=getFilteredSubTaskList', userData);
+  return this.http.post(this.url + '/mobile_app_apis/subtasks.php?method=getFilteredSubTaskList', userData);
  }
+ checkAppUpdate(appInfo){
+   return this.http.post(this.url + '/mobile_app_apis/user_login.php?method=getAppUpdateDetails',appInfo);
+ }
+ getDashBoardCount(userDetails){
+  return this.http.post(this.url + '/admin_apis/dashboard_data.php?method=getDashboardCounts',userDetails);
+ }
+ getComplitedTaskList(userDetails){
+  return this.http.post(this.url + '/admin_apis/tasks.php?method=getCompletedTaskList',userDetails);
+ }
+ getPendingTaskList(userDetails){
+  return this.http.post(this.url + '/admin_apis/tasks.php?method=getPendingTaskList',userDetails);
+ }
+ getComplitedSubTaskList(userDetails){
+  return this.http.post(this.url + '/admin_apis/subtasks.php?method=getCompletedSubTasksList',userDetails);
+ }
+ getPendingSubTaskList(userDetails){
+  return this.http.post(this.url + '/admin_apis/subtasks.php?method=getPendingSubTasksList',userDetails);
+ }
+ getTaskChangeRequestList(userDetails){
+  return this.http.post(this.url + '/admin_apis/tasks.php?method=getChangeRequestListForTask',userDetails);
+ }
+ getSubtaskChangeRequestList(userDetails){
+  return this.http.post(this.url + '/admin_apis/subtasks.php?method=getChangeRequestListForSubTask',userDetails);
+ }
+ getChangeRequestDetails(userDetails){
+  return this.http.post(this.url + '/admin_apis/tasks.php?method=getChangeRequestDetailsForTask',userDetails);
+ }
+ cancelTaskChangeRequest(requestChange){
+  return this.http.post(this.url + '/admin_apis/tasks.php?method=cancelChangeRequestForTask',requestChange);
+ }
+ processTaskChangeRequest(requestChangeData){
+  return this.http.post(this.url + '/admin_apis/tasks.php?method=processChangeRequestForTask',requestChangeData);
+ }
+ getChangeRequestDetailsForSubTask(userDetails){
+  return this.http.post(this.url + '/admin_apis/subtasks.php?method=getChangeRequestDetailsForSubTask',userDetails);
+ }
+ cancelChangeRequestForSubTask(requestChange){
+  return this.http.post(this.url + '/admin_apis/subtasks.php?method=cancelChangeRequestForSubTask',requestChange);
+ }
+ processChangeRequestForSubTask(requestChangeData){
+  return this.http.post(this.url + '/admin_apis/subtasks.php?method=processChangeRequestForSubTask',requestChangeData);
+ }
+
 }

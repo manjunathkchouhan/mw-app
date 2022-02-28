@@ -21,7 +21,6 @@ export class AppComponent {
       const showStatusBar = async () => {
         await StatusBar.show();
       };
-      this.fcmService.initPush();
       SplashScreen.hide();
     });
     // Use matchMedia to check the user preference

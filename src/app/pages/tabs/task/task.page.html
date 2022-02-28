@@ -28,20 +28,18 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <!-- <section> -->
           <ion-button class="b"
           *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'"
           expand="block"
           routerLink="/tabs/add-task"
           >Add Task</ion-button>
-        <!-- </section> -->
       </ion-col>
     </ion-row>
   </ion-grid>
 
   <ion-list *ngFor="let tasks of tasksList | filter:filterTerm">
     <ion-item (click)="onTaskDetails(tasks?.task_id)">
-      <ion-grid>
+      <ion-grid color="primary">
         <ion-row>
           <ion-col size="12">
             <div><ion-label>{{tasks?.task_title}}</ion-label></div>
@@ -101,8 +99,4 @@
       </ion-grid>
     </ion-item>
   </ion-list>
-  <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher> -->
-
 </ion-content>

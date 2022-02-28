@@ -63,9 +63,10 @@
               User is required.
             </span>
             <ion-item class="box">
-              <ion-label position="floating">Select Task Priority *</ion-label>
+              <!-- <ion-label position="floating">Select Task Priority *</ion-label> -->
               <ion-select
                 formControlName="task_priority"
+                placeholder="Select Task Priority *"
                 required>
                 <ion-select-option
                   *ngFor="let task of taskPriorities"
@@ -79,8 +80,9 @@
               Task priority is required.
             </span>
             <ion-item class="box">
-              <ion-label position="floating">Select Task Interval *</ion-label>
+              <!-- <ion-label position="floating">Select Task Interval *</ion-label> -->
               <ion-select
+                placeholder="Select Task Interval *"
                 formControlName="task_interval"
                 required>
                 <ion-select-option

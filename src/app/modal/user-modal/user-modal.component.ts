@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -13,7 +13,6 @@ export class UserModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.user);
   }
   dismiss() {
     this.modalCtrl.dismiss();

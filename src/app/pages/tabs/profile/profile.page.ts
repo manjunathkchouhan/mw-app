@@ -13,19 +13,21 @@ const TOKEN_KEY = 'my-token';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);
+  isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    null
+  );
   token;
   constructor(
     private authService: AuthenticationService,
     private alertController: AlertController,
     private router: Router,
     private loadingController: LoadingController
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.getUserDetails();
   }
-  async getUserDetails(){
+  async getUserDetails() {
     const loading = await this.loadingController.create();
     await loading.present();
     const token = await Storage.get({ key: TOKEN_KEY });
@@ -35,9 +37,9 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  async submitLogout(){
+  async submitLogout() {
     const userId = {
-      user_id: this.token.user_id
+      user_id: this.token.user_id,
     };
     const loading = await this.loadingController.create();
     await loading.present();
@@ -50,21 +52,16 @@ export class ProfilePage implements OnInit {
         });
         await alert.present();
         this.router.navigateByUrl('/', { replaceUrl: true });
-      }, async (res) => {
+      },
+      async (res) => {
         await loading.dismiss();
         const alert = await this.alertController.create({
           header: 'Logout failed',
           message: res.error.error,
           buttons: ['OK'],
         });
-
         await alert.present();
       }
     );
   }
-  // async logout(){
-  //   await this.authService.submitLogout();
-  //   this.router.navigateByUrl('/', { replaceUrl: true });
-  // }
-
 }

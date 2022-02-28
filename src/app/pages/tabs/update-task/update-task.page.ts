@@ -91,15 +91,29 @@ export class UpdateTaskPage implements OnInit {
     this.updateTask.get('file_name')?.updateValueAndValidity();
     this.updateTask.patchValue({ file_extension: '.'+ ext });
     this.updateTask.get('file_extension')?.updateValueAndValidity();
-    const reader = new FileReader();
-    reader.onload = () => {
-      console.log(reader.result);
-      // eslint-disable-next-line prefer-const
-      let base64 = reader.result;
-      this.updateTask.patchValue({ base64_file: base64 });
+    const newInstance = this.getFileReader();
+    newInstance.readAsDataURL(event.target.files[0]);
+    newInstance.onload = (imgsrc) => {
+      const url = (imgsrc.target as FileReader).result;
+      console.log(url);
+      this.updateTask.patchValue({ base64_file: url });
       this.updateTask.get('base64_file')?.updateValueAndValidity();
     };
-    reader.readAsDataURL(file);
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   console.log(reader.result);
+    //   // eslint-disable-next-line prefer-const
+    //   let base64 = reader.result;
+    //   this.updateTask.patchValue({ base64_file: base64 });
+    //   this.updateTask.get('base64_file')?.updateValueAndValidity();
+    // };
+    // reader.readAsDataURL(file);
+  }
+  public getFileReader(): FileReader {
+    const fileReader = new FileReader();
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    const zoneOriginalInstance = (fileReader as any)['__zone_symbol__originalInstance'];
+    return zoneOriginalInstance || fileReader;
   }
 
 }

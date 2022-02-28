@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/dashboard" slot="start"></ion-back-button>
+      </ion-buttons>
+    <ion-title>Completed Task List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngFor="let tasks of complitedTaskList">
+    <ion-item (click)="onTaskDetails(tasks?.task_id)">
+      <ion-grid color="primary">
+        <ion-row>
+          <ion-col size="12">
+            <div><ion-label>{{tasks?.task_title}}</ion-label></div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="4">
+           <ion-text>{{tasks?.project_title}}</ion-text>
+          </ion-col>
+          <ion-col size="2">
+            <div>
+              <div>
+                <ion-progress-bar
+                  value="{{tasks?.task_completion/100}}"
+                  class="ion-padding-horizontal"
+                ></ion-progress-bar>
+              </div>
+
+            </div>
+          </ion-col>
+          <ion-col size="2">
+            <ion-text
+            >{{tasks?.task_completion}}%</ion-text
+          >
+          </ion-col>
+          <ion-col size="3" *ngIf="tasks?.days_left >= 1">
+            <span class="sp">Days Left: </span
+            ><strong>{{tasks?.days_left}}</strong>
+          </ion-col>
+          <ion-col size="3" *ngIf="tasks?.days_left < 1">
+            <span class="sp">Overdue: </span>
+            <span *ngIf="tasks?.days_left < 1 "
+              ><strong style="color: red">{{-tasks?.days_left}}</strong></span
+            >
+          </ion-col>
+          <ion-col size="1" class="ion-text-end">
+            <div *ngIf="tasks?.task_priority === 'LOW'">
+              <ion-icon style="color: green" name="radio-button-on"></ion-icon>
+            </div>
+            <div *ngIf="tasks?.task_priority === 'MEDIUM'">
+              <ion-icon style="color: orange" name="radio-button-on"></ion-icon>
+            </div>
+            <div *ngIf="tasks?.task_priority === 'HIGH'">
+              <ion-icon style="color: red" name="radio-button-on"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" slot="start"></ion-back-button>
+      </ion-buttons>
+    <ion-title>Task Change Request List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <ion-list *ngFor="let item of taskChangeRequestList">
+    <ion-item>
+      <ion-grid color="primary">
+        <ion-row>
+          <ion-col size="12">
+            <div><ion-label>{{item?.change_request_type}}</ion-label></div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div><ion-label>{{item?.task_title}}</ion-label></div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list> -->
+  <ion-card *ngFor="let item of taskChangeRequestList" (click)="onClickList(item.task_change_request_id)">
+    <ion-card-content style="color: white;">
+      <div>
+        <ion-label>{{item?.change_request_type}}</ion-label>
+      </div>
+      <div>
+        <ion-label>{{item?.task_title}}</ion-label>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

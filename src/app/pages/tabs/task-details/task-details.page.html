@@ -23,7 +23,6 @@
       </ion-col>
       <ion-col size="6">
         <ion-button
-          *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'"
           expand="block"
           (click)="onChangeRequest()"
           [disabled]="singleTask?.task_status === 'VERIFIED AND CLOSED' || singleTask?.task_status === 'CLOSED NOT VERIFIED'"
@@ -101,43 +100,103 @@
       <ion-col><span class="sp">Completion: </span>{{singleTask?.task_completion}} %</ion-col>
       <ion-col><a class="link" (click)="openModal()">Participant</a></ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="singleTask?.source_location">
       <ion-col
-        ><a class="link" (click)="openFile(singleTask?.source_location)"
+        ><a class="link" (click)="previewAnyFiles(singleTask?.source_location)"
           >View Attachment</a
         ></ion-col
       >
     </ion-row>
-    <ion-row *ngIf="singleTask?.sub_tasks">
-      <ion-col>
-        <span class="sp">Sub Task:</span>
-      </ion-col>
-    </ion-row>
   </ion-grid>
-  <ion-list *ngFor="let subtask of singleTask?.sub_tasks">
-    <ion-item (click)="onSubTaskDetails(subtask?.sub_task_id)">
-      <ion-label class="link">{{subtask?.sub_task_title}}</ion-label>
-    </ion-item>
-  </ion-list>
-  <!-- <ion-list>
-    <ion-list-header>Task Updates</ion-list-header>
-    <div *ngFor="let updates of singleTask?.task_updates">
-      <ion-item>
-        <ion-label>{{updates?.first_name}} {{updates?.last_name}}</ion-label>
-        <ion-text>{{updates?.description}}</ion-text>
-        <ion-text>{{updates?.task_status}}</ion-text>
+  <div style="margin-top: 50px;" *ngIf="singleTask?.sub_tasks">
+    <h3 class="ion-text-center link">Sub Tasks List</h3>
+    <!-- can you make header color to blue, same as theme color  -->
+    <!-- <ion-list *ngFor="let subtask of singleTask?.sub_tasks">
+      <ion-item (click)="onSubTaskDetails(subtask?.sub_task_id)">
+        <ion-label class="link">{{subtask?.sub_task_title}}</ion-label>
       </ion-item>
-    </div>
-  </ion-list> -->
-  <!-- <ion-card *ngIf="singleTask?.task_updates.length > 0">
-    <ion-card-header>
-      <ion-card-title>Task Updates</ion-card-title>
-    </ion-card-header> -->
+    </ion-list> -->
+    <ion-card *ngFor="let subtask of singleTask?.sub_tasks" (click)="onSubTaskDetails(subtask?.sub_task_id)">
+      <ion-card-header>
+        <ion-card-subtitle class="link">{{subtask?.sub_task_title}}</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </div>
 
-    <ion-list>
-      <ion-list-header style="font-size: large;"><strong>Task Updates</strong></ion-list-header>
-    </ion-list>
-      <ion-list *ngFor="let updates of singleTask?.task_updates">
+    <div style="margin-top: 50px;" *ngIf="singleTask?.task_updates">
+      <h3 class="ion-text-center link">Task Updates</h3>
+      <ion-card *ngFor="let updates of singleTask?.task_updates">
+        <ion-card-header>
+          <ion-card-title>Updated By: {{updates?.first_name}} {{updates?.last_name}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div>
+            <ion-text>Description: {{updates?.description}}</ion-text>
+          </div>
+          <div>
+            <ion-text> {{updates?.task_status}}</ion-text>
+          </div>
+          <div>
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col>
+                  <a *ngIf="updates?.source_location" class="link" (click)="previewAnyFiles(updates?.source_location)"
+                  >View Attachment</a
+                >
+                </ion-col>
+                <ion-col>
+                  <ion-text> {{updates.updated_on | date: 'dd/MM/yyyy h:mm a' }}</ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div  style="margin-top: 50px;" *ngIf="singleTask?.task_change_requests">
+      <h3 class="ion-text-center link">Change Requests</h3>
+      <ion-card *ngFor="let requests of singleTask?.task_change_requests">
+        <ion-grid  class="ion-no-padding">
+          <ion-row>
+            <ion-col size="10">
+              <ion-card-header>
+                <ion-card-title>Requested By: {{requests?.first_name}} {{requests?.last_name}}</ion-card-title>
+              </ion-card-header>
+            </ion-col>
+            <ion-col size="2" *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN' && token?.user_id === singleTask?.created_by">
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-icon name="chevron-forward-outline" (click)="onClick(requests?.task_change_request_id)"></ion-icon></ion-card-title>
+              </ion-card-header>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-card-content>
+          <div>
+            <ion-text>Description: {{requests?.change_request_type}}</ion-text>
+          </div>
+          <div>
+            <ion-text> {{requests?.task_status}}</ion-text>
+          </div>
+          <div>
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col>
+                </ion-col>
+                <ion-col>
+                  <ion-text style="font-size: small;"> {{requests?.requested_on | date: 'dd/MM/yyyy h:mm a' }}</ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+      <!-- <ion-list *ngFor="let updates of singleTask?.task_updates">
 
         <ion-item >
           <ion-grid>
@@ -156,7 +215,7 @@
             </ion-row>
             <ion-row>
               <ion-col size="6"
-              ><a *ngIf="updates?.source_location" class="link" (click)="openFile(updates?.source_location)"
+              ><a *ngIf="updates?.source_location" class="link" (click)="previewAnyFiles(updates?.source_location)"
                 >View Attachment</a
               ></ion-col
             >
@@ -166,7 +225,7 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-      </ion-list>
+      </ion-list> -->
 
 </ion-content>
 <!-- <ion-footer>

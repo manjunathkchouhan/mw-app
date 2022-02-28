@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/task-change-request-list" slot="start"></ion-back-button>
+      </ion-buttons>
+    <ion-title>Change Request</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <h2>{{taskChangeRequestDetails?.change_request_type}}</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Change Request Description:</span></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>{{taskChangeRequestDetails?.change_request_description}}</ion-col>
+    </ion-row>
+    <ion-row *ngIf="taskChangeRequestDetails?.change_request_type  === 'Date Extension'">
+      <ion-col>
+        <ion-item>
+          <ion-input [value]="dateValue" placeholder="Select Date"  [(ngModel)]="extend_date" required></ion-input>
+          <ion-button fill="clear" id="open-date-input-3">
+            <ion-icon icon="calendar"></ion-icon>
+          </ion-button>
+          <ion-popover trigger="open-date-input-3" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+              min="{{dateTill}}"
+                #popoverDatetime3
+                presentation="date"
+                (ionChange)="dateValue = formatDate2(popoverDatetime3.value)"
+              showDefaultButtons="true"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+          </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="taskChangeRequestDetails?.users">
+      <ion-col>
+        <ion-item>
+          <ion-select [(ngModel)]="selected" multiple>
+            <ion-select-option *ngFor="let item of taskChangeRequestDetails.users" [value]="item">{{item.first_name }} {{item.last_name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Task: </span></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>{{taskChangeRequestDetails?.task_title}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Task Description:</span></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>{{taskChangeRequestDetails?.task_description}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Start Date: </span></ion-col>
+      <ion-col><span class="sp">End Date: </span></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>{{taskChangeRequestDetails?.start_date | date: 'dd/MM/yyyy'}}</ion-col>
+      <ion-col>{{taskChangeRequestDetails?.end_date | date: 'dd/MM/yyyy'}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><span class="sp">Priority: </span></ion-col>
+      <ion-col><span class="sp">Task Status: </span><strong></strong></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><strong>{{taskChangeRequestDetails?.task_priority}}</strong></ion-col>
+      <ion-col><strong>{{taskChangeRequestDetails?.task_status}}</strong></ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+<ion-footer>
+  <ion-grid >
+    <ion-row>
+      <ion-col size="6">
+        <ion-button
+          (click)="onCancel()"
+          expand="block"
+          >Cancel</ion-button
+        >
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block"
+        (click)="onApprove()"
+          >Approve</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

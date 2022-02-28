@@ -1,21 +1,13 @@
-// .sp{
-//   color:#F44336 ;
-// }
-
 .link{
-  color: blue;
+  color: #428cff;
 }
 .link:hover{
-  color: blue;
+  color: #428cff;
 }
-
-// ion-textarea{
-//   height: 40px;
-// }
-
-
-
-
+ion-card-title {
+  font-size: medium;
+  margin-bottom: -10px;
+}
 .icon-input {
   display: flex;
   align-items: flex-end;

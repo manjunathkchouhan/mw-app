@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { UserModalComponent } from '../../../modal/user-modal/user-modal.component';
+import { Storage } from '@capacitor/storage';
+const TOKEN_KEY = 'my-token';
+
 
 @Component({
   selector: 'app-sub-task-details',
@@ -13,6 +16,7 @@ import { UserModalComponent } from '../../../modal/user-modal/user-modal.compone
 export class SubTaskDetailsPage implements OnInit {
   subTaskId;
   subTaskDetails: any;
+  token;
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthenticationService,
@@ -26,6 +30,13 @@ export class SubTaskDetailsPage implements OnInit {
 
   ngOnInit() {
     this.getSubTaskDetails();
+    this.getUserDetails();
+  }
+  async getUserDetails(){
+    const token = await Storage.get({ key: TOKEN_KEY });
+    if (token && token.value) {
+      this.token = JSON.parse(token.value);
+    }
   }
   ionViewWillEnter() {
     this.getSubTaskDetails();
@@ -56,7 +67,11 @@ export class SubTaskDetailsPage implements OnInit {
     });
     return await modal.present();
   }
-  openFile(file){
-    console.log('file');
+  openFile(url){
+    window.open(url, '_blank');
+  }
+  onClick(changeRequestId){
+    console.log(changeRequestId);
+    this.routes.navigate(['/tabs/subtask-change-request-details/' + changeRequestId]);
   }
 }

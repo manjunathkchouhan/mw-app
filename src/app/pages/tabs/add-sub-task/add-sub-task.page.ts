@@ -42,6 +42,9 @@ export class AddSubTaskPage implements OnInit {
   taskId;
   dateTill;
   today;
+  endDate;
+  endD;
+  end;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -52,14 +55,23 @@ export class AddSubTaskPage implements OnInit {
     private loadingController: LoadingController,
     public navCtrl: NavController
   ) {
-    this.taskId = this.activatedRoute.snapshot.paramMap.get('task_id');
-    console.log(this.taskId);
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.taskId = params.get('task_id');
+      this.endDate = params.get('task_endDate');
+   });
+
+    // this.taskId = this.activatedRoute.snapshot.paramMap.get('task_id');
+    // console.log(this.taskId);
   }
 
   ngOnInit(): void {
     this.today = new Date();
     this.today.setDate(this.today.getDate());
     this.dateTill = this.today.toISOString().substring(0, 10);
+    this.end = new Date(this.endDate);
+    this.end.setDate(this.end.getDate() + 1);
+    this.endD = this.end.toISOString().substring(0, 10);
+    // console.log(this.endD);
     this.form();
     this.getAllPriorities();
     this.getAllUsers();
@@ -90,6 +102,8 @@ export class AddSubTaskPage implements OnInit {
       base64_file: [''],
       created_by: ['']
     });
+    this.createSubTask.patchValue({ start_date: this.dateTill});
+    this.createSubTask.get('start_date')?.updateValueAndValidity();
   }
   formatDate(value: string) {
     return format(parseISO(value), 'MMM dd yyyy');
@@ -122,6 +136,10 @@ export class AddSubTaskPage implements OnInit {
     this.authenticationService.getTaskPriorities().subscribe((res: any) =>{
       if(res){
         this.taskPriorities = res;
+        const filterResult = this.taskPriorities.filter(filterData => filterData.task_priority === 'HIGH');
+        this.createSubTask.patchValue({
+          sub_task_priority:filterResult[0].task_priority
+      });
       }
     });
   }
@@ -129,7 +147,10 @@ export class AddSubTaskPage implements OnInit {
     this.authenticationService.getTaskIntervals().subscribe((res: any) =>{
       if(res){
         this.intervals = res;
-        console.log(this.intervals);
+        const filterR = this.intervals.filter(filter => filter.task_interval === 'ONCE');
+        this.createSubTask.patchValue({
+          task_interval:filterR[0].task_interval
+      });
       }
     });
   }
@@ -147,6 +168,7 @@ export class AddSubTaskPage implements OnInit {
     this.createSubTask.value.created_by = this.token.user_id;
     const loading = await this.loadingController.create();
     await loading.present();
+    console.log(this.createSubTask.value);
     this.authenticationService.addSubTask(this.createSubTask.value).subscribe(async (res: any) =>{
       console.log(res);
       if(res.status === 'SUCCESS'){
@@ -178,13 +200,27 @@ export class AddSubTaskPage implements OnInit {
     this.createSubTask.get('file_name')?.updateValueAndValidity();
     this.createSubTask.patchValue({ file_extension: '.'+ ext });
     this.createSubTask.get('file_extension')?.updateValueAndValidity();
-    const reader = new FileReader();
-    reader.onload = () => {
-      // eslint-disable-next-line prefer-const
-      let base64 = reader.result;
-      this.createSubTask.patchValue({ base64_file: base64 });
-      this.createSubTask.get('base64_file')?.updateValueAndValidity();
-    };
-    reader.readAsDataURL(file);
+    const newInstance = this.getFileReader();
+      newInstance.readAsDataURL(event.target.files[0]);
+      newInstance.onload = (imgsrc) => {
+        const url = (imgsrc.target as FileReader).result;
+        console.log(url);
+        this.createSubTask.patchValue({ base64_file: url });
+        this.createSubTask.get('base64_file')?.updateValueAndValidity();
+      };
+    // const reader = new FileReader();
+    // reader.onload = () => {
+    //   // eslint-disable-next-line prefer-const
+    //   let base64 = reader.result;
+    //   this.createSubTask.patchValue({ base64_file: base64 });
+    //   this.createSubTask.get('base64_file')?.updateValueAndValidity();
+    // };
+    // reader.readAsDataURL(file);
+  }
+  public getFileReader(): FileReader {
+    const fileReader = new FileReader();
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    const zoneOriginalInstance = (fileReader as any)['__zone_symbol__originalInstance'];
+    return zoneOriginalInstance || fileReader;
   }
 }

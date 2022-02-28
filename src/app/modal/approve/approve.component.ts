@@ -36,7 +36,6 @@ export class ApproveComponent implements OnInit {
       };
       console.log(taskApprove);
       this.authService.approveTask(taskApprove).subscribe(async (res: any) =>{
-        console.log(res);
         if(res.status === 'SUCCESS'){
           loading.dismiss();
           const onClosedData = 'Wrapped Up!';

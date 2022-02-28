@@ -42,7 +42,7 @@ export class TaskDetailsPage implements OnInit {
     private modalCtrl: ModalController,
     private fileOpener: FileOpener,
     private loadingController: LoadingController,
-    private http: HttpClient,
+    private http: HttpClient
   ) {
     this.taskId = this.activatedRoute.snapshot.paramMap.get('task_id');
     console.log(this.taskId);
@@ -82,7 +82,7 @@ export class TaskDetailsPage implements OnInit {
      });
    }
    onAddSubTask(){
-     this.routes.navigate(['/tabs/add-sub-task/' + this.taskId]);
+     this.routes.navigate(['/tabs/add-sub-task/' + this.taskId +'/'+  this.singleTask.end_date]);
    }
    onSubTaskDetails(subTaskId){
     this.routes.navigate(['/tabs/sub-task-details/' + subTaskId]);
@@ -182,15 +182,15 @@ export class TaskDetailsPage implements OnInit {
         // });
         const path = savedFile.uri;
         console.log(path);
-        const mimeType = this.getMimeType(name);
-        this.fileOpener.open(path, mimeType).then(() =>{
-          console.log('File is opened');
-        }).catch(error => console.log('Error openings file', error));
-        this.myFiles.unshift(path);
-        Storage.set({
-          key: FILE_KEY,
-          value: JSON.stringify(this.myFiles)
-        });
+        // const mimeType = this.getMimeType(name);
+        // this.fileOpener.open(path, mimeType).then(() =>{
+        //   console.log('File is opened');
+        // }).catch(error => console.log('Error openings file', error));
+        // this.myFiles.unshift(path);
+        // Storage.set({
+        //   key: FILE_KEY,
+        //   value: JSON.stringify(this.myFiles)
+        // });
       }
     });
   }
@@ -266,4 +266,10 @@ export class TaskDetailsPage implements OnInit {
 
   // }
 
+  previewAnyFiles(url){
+    window.open(url, '_blank');
+  }
+  onClick(ChangeRequestId){
+    this.routes.navigate(['/tabs/task-change-request-details/' + ChangeRequestId]);
+  }
 }

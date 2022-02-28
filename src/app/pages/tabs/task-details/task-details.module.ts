@@ -20,7 +20,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
     FormsModule
   ],
   providers: [
-    FileOpener
+    FileOpener,
   ],
   declarations: [TaskDetailsPage]
 })

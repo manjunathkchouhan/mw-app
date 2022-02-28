@@ -39,7 +39,6 @@ dateTill;
    }
 
   ngOnInit() {
-    console.log(this.taskList);
     this.getTaskStatus();
   }
   dismiss() {
@@ -47,7 +46,6 @@ dateTill;
   }
   getTaskStatus(){
     this.authenticationService.getFilterApi().subscribe((res: any) =>{
-      console.log(res);
       if(res){
         this.taskPriorities = res.task_priorities;
         this.taskStatus= res.task_status;
@@ -79,11 +77,9 @@ async getFilter(){
     selected_priority: this.selectedPriority,
     selected_status: this.selectedStatus
   };
-  console.log(userData);
   const loading = await this.loadingController.create();
   await loading.present();
   this.authenticationService.getFilter(userData).subscribe(async (res: any) =>{
-    console.log(res);
     if(res.status === 'FAILED'){
       loading.dismiss();
         const alert = await this.alertController.create({
@@ -97,11 +93,6 @@ async getFilter(){
       this.filterResult = res;
       this.modalCtrl.dismiss(this.filterResult);
     }
-  /*
-  $error = array('status' => "FAILED", "message" => "Records not available");
-				$this->response($this->json($error), 200);
-        */
-    // }
   });
 }
 

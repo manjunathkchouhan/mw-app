@@ -1,72 +1,90 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Dashboard</ion-title>
-    <ion-buttons slot="end">
+    <!-- <ion-buttons slot="end">
       <ion-button>
         <ion-toggle (ionChange)="toggle($event)"></ion-toggle>
       </ion-button>
-    </ion-buttons>
-
+    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-grid>
-    <ion-row>
+    <ion-row style="margin-top: 20px;">
       <ion-col>
         <div>
-          <ion-card color="primary">
+          <ion-card color="primary" (click)="onTaskComplited(dashboardCount?.completed_tasks)">
             <ion-card-header>
-              <ion-card-subtitle>No of Tasks</ion-card-subtitle>
-              <ion-card-title>50</ion-card-title>
+              <ion-card-subtitle>Completed Tasks</ion-card-subtitle>
+              <ion-card-title
+                >{{dashboardCount?.completed_tasks}}</ion-card-title
+              >
             </ion-card-header>
-
-          <!-- <ion-card-content>
-            Keep close to Nature's heart... and break clear away, once in awhile,
-            and climb a mountain or spend a week in the woods. Wash your spirit clean.
-          </ion-card-content> -->
-        </ion-card>
-        <ion-card color="primary">
-            <ion-card-header>
-              <ion-card-subtitle>Tasks On Priorority</ion-card-subtitle>
-              <ion-card-title>20 <ion-icon name="alert-outline" color="primary"></ion-icon></ion-card-title>
-            </ion-card-header>
-
-          <!-- <ion-card-content>
-            Keep close to Nature's heart... and break clear away, once in awhile,
-            and climb a mountain or spend a week in the woods. Wash your spirit clean.
-          </ion-card-content> -->
-        </ion-card>
-      </div>
+          </ion-card>
+        </div>
       </ion-col>
       <ion-col>
         <div>
-          <ion-card color="primary">
+          <ion-card color="primary" (click)="onComplitedSubTaskList(dashboardCount?.completed_subtasks)">
             <ion-card-header>
-              <ion-card-subtitle>Pending Tasks</ion-card-subtitle>
-              <ion-card-title>0</ion-card-title>
+              <ion-card-subtitle>Completed Sub-Tasks</ion-card-subtitle>
+              <ion-card-title
+                >{{dashboardCount?.completed_subtasks}}</ion-card-title>
             </ion-card-header>
-
-          <!-- <ion-card-content>
-            Keep close to Nature's heart... and break clear away, once in awhile,
-            and climb a mountain or spend a week in the woods. Wash your spirit clean.
-          </ion-card-content> -->
-        </ion-card>
-        <ion-card color="primary">
-          <ion-card-header>
-            <ion-card-subtitle>Reports</ion-card-subtitle>
-            <ion-card-title>0</ion-card-title>
-          </ion-card-header>
-
-        <!-- <ion-card-content>
-          Keep close to Nature's heart... and break clear away, once in awhile,
-          and climb a mountain or spend a week in the woods. Wash your spirit clean.
-        </ion-card-content> -->
-      </ion-card>
+          </ion-card>
         </div>
       </ion-col>
     </ion-row>
-    </ion-grid>
-
-
+    <ion-row>
+      <ion-col>
+        <div>
+          <ion-card color="primary" (click)="onPendingTaskList(dashboardCount?.pending_tasks)">
+            <ion-card-header>
+              <ion-card-subtitle>Pending Tasks</ion-card-subtitle>
+              <ion-card-title>{{dashboardCount?.pending_tasks}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <ion-card color="primary" (click)="onPendingSubTaskList(dashboardCount?.completed_subtasks)">
+            <ion-card-header>
+              <ion-card-subtitle>Pending Sub-Tasks</ion-card-subtitle>
+              <ion-card-title
+                >{{dashboardCount?.pending_subtasks}}</ion-card-title
+              >
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row  *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN'">
+      <ion-col>
+        <div>
+          <ion-card color="primary" (click)="onTaskChangeRequestList(dashboardCount?.change_requests_for_tasks)">
+            <ion-card-header>
+              <ion-card-subtitle>Tasks Change Request</ion-card-subtitle>
+              <ion-card-title
+                >{{dashboardCount?.change_requests_for_tasks}}</ion-card-title
+              >
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div>
+          <ion-card color="primary" (click)="onSubtaskChangeRequestList(dashboardCount?.change_requests_for_subtasks)">
+            <ion-card-header>
+              <ion-card-subtitle>Sub-task Change request</ion-card-subtitle>
+              <ion-card-title
+                >{{dashboardCount?.change_requests_for_subtasks}}</ion-card-title
+              >
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

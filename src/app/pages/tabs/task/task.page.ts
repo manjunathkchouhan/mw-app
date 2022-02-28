@@ -1,22 +1,31 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { IonDatetime, LoadingController, MenuController, ModalController } from '@ionic/angular';
+import {
+  IonDatetime,
+  LoadingController,
+  MenuController,
+  ModalController,
+} from '@ionic/angular';
 import { Storage } from '@capacitor/storage';
-import { Event, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import {
+  Event,
+  NavigationEnd,
+  Router,
+  RoutesRecognized,
+} from '@angular/router';
 import { Subscription } from 'rxjs';
 const TOKEN_KEY = 'my-token';
 import { filter, pairwise } from 'rxjs/operators';
 import { format, parseISO } from 'date-fns';
 import { FilterComponent } from 'src/app/modal/filter/filter.component';
 
-
 @Component({
   selector: 'app-task',
   templateUrl: './task.page.html',
   styleUrls: ['./task.page.scss'],
 })
-export class TaskPage implements OnInit, OnDestroy{
+export class TaskPage implements OnInit, OnDestroy {
   @ViewChild(IonDatetime, { static: true }) datetime: IonDatetime;
   tasksList: any;
   filterTerm: string;
@@ -25,15 +34,15 @@ export class TaskPage implements OnInit, OnDestroy{
   itemSelected = [];
   itemSelected1 = [];
   actualTaskList;
-  filter= false;
+  filter = false;
   slideOpts = {
     initialSlide: 0,
-    speed: 400
+    speed: 400,
   };
   taskStatus;
   dateValue = '';
   dateValue2 = '';
-  dateValue3 ='';
+  dateValue3 = '';
   today;
   dateTill;
   start_date;
@@ -47,20 +56,18 @@ export class TaskPage implements OnInit, OnDestroy{
     private router: Router,
     private loadingController: LoadingController,
     private modalCtrl: ModalController
-    ) {
-  }
+  ) {}
 
- ngOnInit() {
-    // this.today = new Date();
-    // this.today.setDate(this.today.getDate());
-    // this.dateTill = this.today.toISOString().substring(0, 10);
-    this.taskListSub = this.authenticationService.getTaskData.subscribe(taskData =>{
-      this.actualTaskList = taskData;
-      this.tasksList = taskData;
-    });
+  ngOnInit() {
+    this.taskListSub = this.authenticationService.getTaskData.subscribe(
+      (taskData) => {
+        this.actualTaskList = taskData;
+        this.tasksList = taskData;
+      }
+    );
     this.getUserDetails();
   }
-  async getUserDetails(){
+  async getUserDetails() {
     const token = await Storage.get({ key: TOKEN_KEY });
     if (token && token.value) {
       this.token = JSON.parse(token.value);
@@ -71,52 +78,53 @@ export class TaskPage implements OnInit, OnDestroy{
   formatDate(value: string) {
     return format(parseISO(value), 'MMM dd yyyy');
   }
-  formatDate2(value: string){
+  formatDate2(value: string) {
     return format(parseISO(value), 'MMM dd yyyy');
   }
- async ionViewWillEnter() {
+  async ionViewWillEnter() {
     const loading = await this.loadingController.create();
     await loading.present();
     const user = {
       role_id: this.token.role_id,
-      user_id: this.token.user_id
+      user_id: this.token.user_id,
     };
     this.authenticationService.getTasks(user).subscribe();
     await loading.dismiss();
   }
-  getAllTasks(){
+  getAllTasks() {
     this.router.events
-    .pipe(filter((evt: any) => evt instanceof RoutesRecognized), pairwise())
-    .subscribe(async (events: RoutesRecognized[]) => {
-      if(events[0].urlAfterRedirects === '/tabs/add-task' || events[1].urlAfterRedirects === '/tabs/add-task'){
-        const loading = await this.loadingController.create();
-        await loading.present();
-        const user = {
-          role_id: this.token.role_id,
-          user_id: this.token.user_id
-        };
-          this.authenticationService.getTasks(user)
-          .subscribe(async (res: any) =>{
-            if(res){
-              await loading.dismiss();
-              this.actualTaskList = res;
-              this.tasksList = res;
-            }
-          });
-      }
-    });
-    // this.router.events.subscribe(
-    //   (event: Event) => {
-    //     console.log(event
-    //          if (event instanceof NavigationEnd) {}
-    //    }
-    // });
+      .pipe(
+        filter((evt: any) => evt instanceof RoutesRecognized),
+        pairwise()
+      )
+      .subscribe(async (events: RoutesRecognized[]) => {
+        if (
+          events[0].urlAfterRedirects === '/tabs/add-task' ||
+          events[1].urlAfterRedirects === '/tabs/add-task'
+        ) {
+          const loading = await this.loadingController.create();
+          await loading.present();
+          const user = {
+            role_id: this.token.role_id,
+            user_id: this.token.user_id,
+          };
+          this.authenticationService
+            .getTasks(user)
+            .subscribe(async (res: any) => {
+              if (res) {
+                await loading.dismiss();
+                this.actualTaskList = res;
+                this.tasksList = res;
+              }
+            });
+        }
+      });
   }
-  async openMenu(){
+  async openMenu() {
     await this.menu.open();
   }
 
-  onTaskDetails(taskid){
+  onTaskDetails(taskid) {
     this.router.navigate(['/tabs/task-details/' + taskid]);
   }
   ngOnDestroy() {
@@ -124,86 +132,85 @@ export class TaskPage implements OnInit, OnDestroy{
       this.taskListSub.unsubscribe();
     }
   }
-  public async orderTypeSelected(){
+  public async orderTypeSelected() {
     const loading = await this.loadingController.create();
     await loading.present();
-    if(this.itemSelected.length < 1){
+    if (this.itemSelected.length < 1) {
       await loading.dismiss();
-       this.tasksList = this.actualTaskList;
-    }else{
-      await loading.dismiss();
-       this.tasksList = this.actualTaskList.filter(d => this.itemSelected.find(option => d.task_priority === option));
-    }
- }
- public async orderTypeSelected1(){
-  const loading = await this.loadingController.create();
-  await loading.present();
-  if(this.itemSelected1.length < 1){
-    await loading.dismiss();
-     this.tasksList = this.actualTaskList;
-  }else{
-    await loading.dismiss();
-     this.tasksList = this.actualTaskList.filter(d => this.itemSelected1.find(option => d.task_status === option));
-  }
-}
- async filterShow(value){
-  const modal = await this.modalCtrl.create({
-    component: FilterComponent,
-    componentProps: {taskList: this.actualTaskList}
-  });
-  modal.onDidDismiss().then(async (dataReturned) => {
-    console.log(dataReturned);
-    if (dataReturned.data && dataReturned.data.length > 0) {
-      this.tasksList = dataReturned.data;
-      //alert('Modal Sent Data :'+ dataReturned);
-    }else {
       this.tasksList = this.actualTaskList;
+    } else {
+      await loading.dismiss();
+      this.tasksList = this.actualTaskList.filter((d) =>
+        this.itemSelected.find((option) => d.task_priority === option)
+      );
     }
-  });
-  return await modal.present();
-  //  if(value === false){
-  //   this.filter = true;
-  //  }else {
-  //   this.filter = false;
-  //  }
- }
- getTaskStatus(){
-   const roleId = {
-    role_id: this.token.role_id,
-   };
-  this.authenticationService.getTaskStatusForUpdate(roleId).subscribe((res: any) =>{
-    console.log(res);
-    if(res){
-      this.taskStatus = res;
-      this.taskStatus.push({task_status : 'CREATED'});
-      }
-  });
-}
-async loadResults(){
-  if(!this.start_date || !this.end_date){
-    console.log('Date is missing!');
-    return;
   }
-  const loading = await this.loadingController.create();
-  await loading.present();
-  const startDate = new Date(this.start_date);
-  const endDate = new Date(this.end_date);
-  await loading.dismiss();
-  this.tasksList = this.actualTaskList.filter(item => new Date(item.start_date) >= startDate && new Date(item.end_date)<= endDate);
-  console.log(this.tasksList);
-}
-reset() {
-  this.datetime.reset();
-}
-doRefresh(event) {
-  console.log('Begin async operation');
+  public async orderTypeSelected1() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+    if (this.itemSelected1.length < 1) {
+      await loading.dismiss();
+      this.tasksList = this.actualTaskList;
+    } else {
+      await loading.dismiss();
+      this.tasksList = this.actualTaskList.filter((d) =>
+        this.itemSelected1.find((option) => d.task_status === option)
+      );
+    }
+  }
+  async filterShow(value) {
+    const modal = await this.modalCtrl.create({
+      component: FilterComponent,
+      componentProps: { taskList: this.actualTaskList },
+    });
+    modal.onDidDismiss().then(async (dataReturned) => {
+      if (dataReturned.data && dataReturned.data.length > 0) {
+        this.tasksList = dataReturned.data;
+      } else {
+        this.tasksList = this.actualTaskList;
+      }
+    });
+    return await modal.present();
+  }
+  getTaskStatus() {
+    const roleId = {
+      role_id: this.token.role_id,
+    };
+    this.authenticationService
+      .getTaskStatusForUpdate(roleId)
+      .subscribe((res: any) => {
+        if (res) {
+          this.taskStatus = res;
+          this.taskStatus.push({ task_status: 'CREATED' });
+        }
+      });
+  }
+  async loadResults() {
+    if (!this.start_date || !this.end_date) {
+      console.log('Date is missing!');
+      return;
+    }
+    const loading = await this.loadingController.create();
+    await loading.present();
+    const startDate = new Date(this.start_date);
+    const endDate = new Date(this.end_date);
+    await loading.dismiss();
+    this.tasksList = this.actualTaskList.filter(
+      (item) =>
+        new Date(item.start_date) >= startDate &&
+        new Date(item.end_date) <= endDate
+    );
+  }
+  reset() {
+    this.datetime.reset();
+  }
+  doRefresh(event) {
+    console.log('Begin async operation');
 
-  setTimeout(() => {
-    console.log('Async operation has ended');
-    event.target.complete();
-    this.tasksList =  this.actualTaskList;
-  }, 2000);
-}
-
-
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+      this.tasksList = this.actualTaskList;
+    }, 2000);
+  }
 }

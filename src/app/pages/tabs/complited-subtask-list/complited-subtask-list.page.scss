@@ -1,0 +1,11 @@
+ion-progress-bar {
+  height: 5px;
+  border-radius: 5px;
+  margin-top: 7px;
+}
+ion-progress-bar::part(progress){
+  --progress-background: red !important;
+}
+ion-col{
+  font-size: 11px;
+}

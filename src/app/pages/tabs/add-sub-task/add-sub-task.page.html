@@ -47,9 +47,10 @@
               User is required.
             </span>
             <ion-item class="box">
-              <ion-label position="floating">Select Task Priority *</ion-label>
+              <!-- <ion-label position="floating">Select Task Priority *</ion-label> -->
               <ion-select
                 formControlName="sub_task_priority"
+                placeholder="Select Task Priority *"
                 required>
                 <ion-select-option
                   *ngFor="let task of taskPriorities"
@@ -63,9 +64,10 @@
               Task priority is required.
             </span>
             <ion-item class="box">
-              <ion-label position="floating">Select Task Interval *</ion-label>
+              <!-- <ion-label position="floating">Select Task Interval *</ion-label> -->
               <ion-select
                 formControlName="task_interval"
+                placeholder="Select Task Interval *"
                 required>
                 <ion-select-option
                   *ngFor="let item of intervals"
@@ -113,6 +115,7 @@
                       <ng-template>
                         <ion-datetime
                         min="{{dateTill}}"
+                        max="{{endD}}"
                           #popoverDatetime3
                           presentation="date"
                           (ionChange)="dateValue3 = formatDate2(popoverDatetime3.value)"

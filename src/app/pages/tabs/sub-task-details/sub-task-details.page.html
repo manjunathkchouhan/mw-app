@@ -65,11 +65,17 @@
       <ion-col><span class="sp">Completion: </span>{{subTaskDetails?.task_completion}} %</ion-col>
         <ion-col *ngIf="subTaskDetails?.sub_task_users"><a class="link" (click)="openModal()">Participant</a></ion-col>
     </ion-row>
-    <ion-list style="margin-top: 10px;">
+    <ion-row *ngIf="subTaskDetails?.source_location">
+      <ion-col
+        ><a class="link" (click)="openFile(subTaskDetails?.source_location)"
+          >View Attachment</a
+        ></ion-col
+      >
+    </ion-row>
+    <!-- <ion-list style="margin-top: 10px;">
       <ion-list-header style="font-size: large;"><strong>Subtask Updates</strong></ion-list-header>
-    </ion-list>
-      <ion-list *ngFor="let updates of subTaskDetails?.sub_task_updates">
-
+    </ion-list> -->
+      <!-- <ion-list *ngFor="let updates of subTaskDetails?.sub_task_updates">
         <ion-item >
           <ion-grid>
             <ion-row>
@@ -97,28 +103,81 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-      </ion-list>
-    <!-- <ion-row>
-          <ion-col>
-            <span class="sp">Attachments: </span><a class="link" href="{{subTaskDetails.source_location}}" target="_blank">Open file</a>
-          </ion-col>
-        </ion-row> -->
-    <!-- <ion-row>
-          <ion-col>
-            <span class="sp">Users: </span><a class="link" (click)="openDialog()" >Click here to view users</a>
-          </ion-col>
-        </ion-row> -->
-    <!-- <ion-row>
-          <ion-col>
-            <span class="sp">Sub Task:</span>
-          </ion-col>
-        </ion-row> -->
-    <!-- <ion-row *ngFor="let subtask of subTaskDetails?.sub_tasks">
-          <ion-col>
-            {{subtask?.sub_task_title}}
-          </ion-col>
-        </ion-row> -->
+      </ion-list> -->
   </ion-grid>
+  <div style="margin-top: 50px;" *ngIf="subTaskDetails?.sub_task_updates">
+    <h3 class="ion-text-center link">Task Updates</h3>
+    <ion-card *ngFor="let updates of subTaskDetails?.sub_task_updates">
+      <ion-card-header>
+        <ion-card-title>Updated By: {{updates?.first_name}} {{updates?.last_name}}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div>
+          <ion-text>Description: {{updates?.description}}</ion-text>
+        </div>
+        <div>
+        </div>
+        <div>
+          <ion-text> {{updates?.task_status}}</ion-text>
+        </div>
+        <div>
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col>
+                <a *ngIf="updates?.source_location" class="link" (click)="openFile(updates?.source_location)"
+                >View Attachment</a
+              >
+              </ion-col>
+              <ion-col>
+                <ion-text> {{updates.updated_on | date: 'dd/MM/yyyy h:mm a' }}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div  style="margin-top: 50px;" *ngIf="subTaskDetails?.subtask_change_requests">
+    <h3 class="ion-text-center link">Change Requests</h3>
+    <ion-card *ngFor="let requests of subTaskDetails?.subtask_change_requests">
+      <ion-grid  class="ion-no-padding">
+        <ion-row>
+          <ion-col size="10">
+            <ion-card-header>
+              <ion-card-title>Requested By: {{requests?.first_name}} {{requests?.last_name}}</ion-card-title>
+            </ion-card-header>
+          </ion-col>
+          <ion-col size="2" *ngIf="token?.role_name === 'ADMIN' || token?.role_name === 'SUPER_ADMIN' || token?.role_name ==='USER_ADMIN' && token?.user_id === subTaskDetails?.created_by">
+            <ion-card-header>
+              <ion-card-title>
+                <ion-icon name="chevron-forward-outline" (click)="onClick(requests?.subtask_change_request_id)"></ion-icon></ion-card-title>
+            </ion-card-header>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-card-content>
+        <div>
+          <ion-text>Description: {{requests?.change_request_type}}</ion-text>
+        </div>
+        <div>
+          <ion-text> {{requests?.task_status}}</ion-text>
+        </div>
+        <div>
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col>
+              </ion-col>
+              <ion-col>
+                <ion-text style="font-size: small;"> {{requests?.requested_on | date: 'dd/MM/yyyy h:mm a' }}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
 <!-- <ion-footer>
   <ion-item>
